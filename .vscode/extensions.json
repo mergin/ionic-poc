@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "Webnative.webnative",
+    "angular.ng-template",
+    "eamodio.gitlens",
+    "wayou.vscode-todo-highlight",
+    "streetsidesoftware.code-spell-checker",
+    "dbaeumer.vscode-eslint",
+    "pflannery.vscode-versionlens",
+    "esbenp.prettier-vscode",
+    "vitest.explorer"
+  ]
+}
