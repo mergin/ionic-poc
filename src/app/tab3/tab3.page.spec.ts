@@ -13,6 +13,11 @@ describe('Tab3Page', () => {
   });
 
   it('should create', () => {
+    // ARRANGE
+
+    // ACT
+
+    // ASSERT
     expect(component).toBeTruthy();
   });
 });

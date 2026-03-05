@@ -8,6 +8,7 @@ export default {
       2,
       'always',
       [
+        'app', // app/ (Ionic code)
         'mocks', // mocks/ (shared MSW handlers & fixture data)
         'deps', // dependency updates
         'ci', // CI/CD pipeline

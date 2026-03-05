@@ -21,6 +21,11 @@ describe('TabsPage', () => {
   });
 
   it('should create', () => {
+    // ARRANGE
+
+    // ACT
+
+    // ASSERT
     expect(component).toBeTruthy();
   });
 });

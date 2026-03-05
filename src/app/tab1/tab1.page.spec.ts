@@ -13,6 +13,11 @@ describe('Tab1Page', () => {
   });
 
   it('should create', () => {
+    // ARRANGE
+
+    // ACT
+
+    // ASSERT
     expect(component).toBeTruthy();
   });
 });

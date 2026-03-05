@@ -14,7 +14,7 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 - [Commit conventions](#commit-conventions)
 - [Running tests](#running-tests)
 - [API mocking with MSW](#api-mocking-with-msw)
-- [Internationalisation (i18n)](#internationalisation-i18n)
+- [Internationalization (i18n)](#internationalization-i18n)
 - [Adapting for production](#adapting-for-production)
 
 ---
@@ -186,6 +186,7 @@ Scopes are optional but recommended. Allowed values are restricted to this monor
 
 | Scope     | What it covers                                  |
 | --------- | ----------------------------------------------- |
+| `app`     | `app/` — features code                          |
 | `mocks`   | `mocks/` — shared MSW handlers and fixture data |
 | `deps`    | Dependency updates                              |
 | `ci`      | CI/CD pipeline                                  |
@@ -369,7 +370,7 @@ MSW's **`msw/node`** (`mocks/server.ts`) is **not used in unit tests**. Importin
 
 ---
 
-## Internationalisation (i18n)
+## Internationalization (i18n)
 
 Translations are handled by [`@ngx-translate/core`](https://github.com/ngx-translate/core) v17
 with [`@ngx-translate/http-loader`](https://github.com/ngx-translate/http-loader) v17.
