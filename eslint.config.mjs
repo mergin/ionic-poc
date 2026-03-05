@@ -3,7 +3,8 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import json from '@eslint/json';
 import css from '@eslint/css';
-// import angularTemplate from '@angular-eslint/template-parser';
+import angularTemplatePlugin from '@angular-eslint/eslint-plugin-template';
+import angularTemplateParser from '@angular-eslint/template-parser';
 import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
@@ -39,22 +40,29 @@ export default defineConfig([
   // CSS files configuration
   { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
 
-  // HTML template files configuration
-  // {
-  //   files: ['**/*.html'],
-  //   extends: ['@angular-eslint/template/recommended'],
-  //   rules: {
-  //     '@angular-eslint/template/prefer-self-closing-tags': 'error',
-  //     '@angular-eslint/template/prefer-ngsrc': 'warn',
-  //     '@angular-eslint/template/prefer-control-flow': 'error',
-  //     '@angular-eslint/template/cyclomatic-complexity': [
-  //       'error',
-  //       {
-  //         maxComplexity: 10,
-  //       },
-  //     ],
-  //     '@angular-eslint/template/eqeqeq': 'error',
-  //   },
-  // },
+  // HTML template files configuration (@angular-eslint v20 flat config)
+  {
+    files: ['**/*.html'],
+    plugins: {
+      '@angular-eslint/template': angularTemplatePlugin,
+    },
+    languageOptions: {
+      parser: angularTemplateParser,
+    },
+    rules: {
+      ...angularTemplatePlugin.configs.recommended.rules,
+      ...angularTemplatePlugin.configs.accessibility.rules,
+      '@angular-eslint/template/prefer-self-closing-tags': 'error',
+      '@angular-eslint/template/prefer-ngsrc': 'warn',
+      '@angular-eslint/template/prefer-control-flow': 'error',
+      '@angular-eslint/template/cyclomatic-complexity': [
+        'error',
+        {
+          maxComplexity: 10,
+        },
+      ],
+      '@angular-eslint/template/eqeqeq': 'error',
+    },
+  },
   eslintConfigPrettier,
 ]);
