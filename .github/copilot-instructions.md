@@ -8,6 +8,15 @@ workspace conventions.
 - App structure lives under `src/` (not `projects/`).
 - Unit tests run with Jasmine + Karma.
 - Linting uses Angular ESLint + ESLint 9 (`npm run lint`).
+- Use absolute imports with aliases only:
+  - `@app/*` for `src/app/*`
+  - `@mocks/*` for `mocks/*`
+- This project uses MSW for API mocking in development and tests.
+- Mock API handlers live in `mocks/handlers` and should model real API contracts.
+- Social media domain code lives in `src/app/social-media` with:
+  - `models/` for interfaces/types
+  - `services/` for Angular API services
+  - `index.ts` barrel exports in each folder
 
 ## TypeScript Best Practices
 
@@ -40,6 +49,18 @@ workspace conventions.
 - Prefer observable-returning APIs for async data (`Observable<T>`).
 - Keep transport mapping and error handling inside services, not components.
 - Add concise JSDoc for public service methods.
+- Every service must live in its own folder under the domain `services/` directory.
+- Each service folder must contain:
+  - `<name>.service.ts`
+  - `<name>.service.spec.ts`
+  - `<name>.service.spy.ts`
+- Every `<name>.service.spy.ts` must expose spies for all public methods of that service.
+
+## MSW Mocking
+
+- Keep the browser worker setup in `mocks/browser.ts` and initialize it from app/test bootstrap.
+- Keep endpoint handlers grouped by domain in `mocks/handlers` and export them through `mocks/handlers/index.ts`.
+- Ensure mocked endpoints cover all service methods for each domain API.
 
 ## Code Style — Prettier
 

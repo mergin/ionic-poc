@@ -9,3 +9,13 @@ import {
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+
+beforeAll(async () => {
+  const { startMockWorker } = await import('@mocks/browser');
+  await startMockWorker();
+});
+
+afterAll(async () => {
+  const { worker } = await import('@mocks/browser');
+  await worker.stop();
+});

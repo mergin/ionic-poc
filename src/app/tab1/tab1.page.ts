@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { SocialMediaComponent } from '../social-media/social-media.component';
+
+import { SocialMediaComponent } from '@app/social-media/social-media.component';
 
 @Component({
   selector: 'app-tab1',

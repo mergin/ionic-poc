@@ -23,12 +23,15 @@
               "browser": ""
             },
             "index": "src/index.html",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              {
+                "glob": "mockServiceWorker.js",
+                "input": "src",
+                "output": "/"
+              },
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -104,6 +107,11 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               {
+                "glob": "mockServiceWorker.js",
+                "input": "src",
+                "output": "/"
+              },
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
@@ -129,9 +137,7 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@ionic/angular-toolkit"
-    ],
+    "schematicCollections": ["@ionic/angular-toolkit"],
     "analytics": false
   },
   "schematics": {

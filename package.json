@@ -11,7 +11,7 @@
     "test": "ng test --no-watch",
     "lint": "ng lint --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
-    "clean": "rm -rf package-lock.json dist/ node_modules/",
+    "clean": "rm -rf .angular package-lock.json dist/ node_modules/",
     "rebuild": "npm run clean && npm install && npm run build",
     "prepare": "husky"
   },
@@ -89,5 +89,11 @@
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.56.1"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "msw": {
+    "workerDirectory": [
+      "src\\assets",
+      "src"
+    ]
+  }
 }

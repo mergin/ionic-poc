@@ -7,6 +7,7 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 - [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
 - [Getting started](#getting-started)
+- [Workspace conventions](#workspace-conventions)
 - [How to run](#how-to-run)
 - [How to build](#how-to-build)
 - [Linting and formatting](#linting-and-formatting)
@@ -52,8 +53,18 @@ cd ionic-poc
 npm install
 ```
 
-That's it — no additional setup steps are needed. MSW Service Worker files are already committed to
-each project's `public/` folder, so you don't need to run `npx msw init` manually.
+That's it — no additional setup steps are needed. The MSW Service Worker file lives under
+`src/mockServiceWorker.js` (served at `/mockServiceWorker.js`), so you don't need to run
+`npx msw init` manually.
+
+## Workspace conventions
+
+- Use absolute imports with aliases:
+  - `@app/*` → `src/app/*`
+  - `@mocks/*` → `mocks/*`
+- API requests are mocked with MSW in development and tests.
+- The social media mock API handlers are in `mocks/handlers/posts.ts`.
+- Angular social media API models/services are in `src/app/social-media/models` and `src/app/social-media/services`.
 
 ---
 
@@ -236,9 +247,6 @@ Common patterns across all projects:
 ```bash
 # Run all tests once (no watch mode)
 npm test
-
-# Run all tests + coverage, save results to test-result.log
-npm run test:log
 ```
 
 ### What is tested
@@ -249,45 +257,31 @@ npm run test:log
 
 Common patterns across all projects:
 
-- Each `describe` block defines an `async function setup(...)` factory returning
-  `{ fixture, controller, ... }` to simplify reuse.
-- Providers always include `provideZonelessChangeDetection()` and pairing
-  `provideHttpClient(withFetch())` with `provideHttpClientTesting()`.
-- Components that use router directives call `provideRouter([])`.
-- When HTTP dependencies are injected, tests prefer a spy (`<Service>Spy`) rather
-  than exercising `HttpTestingController` directly.
+- Specs follow Jasmine + Karma with Angular `TestBed`.
+- HTTP services are tested with `provideHttpClient()` + `provideHttpClientTesting()` and
+  `HttpTestingController`.
+- Components can inject spy classes (for example, `*.service.spy.ts`) to keep tests focused.
 - Tests follow the `// ARRANGE` / `// ACT` / `// ASSERT` structure and add a
-  `// CLEANUP` section for any flushes needed solely to satisfy `controller.verify()`.
-- Required `input()` values are set via `fixture.componentRef.setInput(...)` inside
-  the setup factory before returning.
+  `// CLEANUP` section when teardown is required.
 
 ### Test stack
 
-- **Runner**: Vitest 4 (managed by `@angular/build:unit-test`, jsdom environment)
-- **HTTP mocking**: `HttpTestingController` — no network calls, no running servers needed
-- **Mock data**: shared fixture in `mocks/db.ts` (`customersDb`, `accountsDb`)
-- **Globals**: `describe`/`it`/`expect`/`beforeAll` etc. are available globally via `"types": ["vitest/globals"]` in `tsconfig.spec.json`
+- **Runner**: Karma + Jasmine (`ng test`)
+- **HTTP mocking**: `HttpTestingController` for service-level HTTP assertions
+- **Mock data**: social media fixtures in `mocks/db.ts` (`socialPostsDb`)
+- **Globals**: Jasmine globals (`describe`, `it`, `expect`, etc.)
 
-> **Note:** `msw/node` (Service Worker mocking) is intentionally **not** used in unit tests — importing it causes the `@angular/build:unit-test` Vitest runner to hang. MSW is wired for browser-only use (`mocks/handlers/`) and is available for future integration/e2e tests.
+> **Note:** Browser MSW is started in `src/test.ts`. Keep unit tests deterministic by mocking services or HTTP calls where needed.
 
 ---
 
-### Coverage report (`npm run test:log`)
+### Coverage
 
-Running `npm run test:log` executes `scripts/test-log.sh`, which:
+Use Angular/Karma coverage flags directly when needed:
 
-1. Runs each project with `--coverage`
-2. Prints live feedback in the terminal as each suite completes
-3. Prints a consolidated coverage summary table at the end
-4. Writes a full human-readable report to **`test-result.log`** in the project root
-
-#### Terminal output (example)
-
-#### `test-result.log` structure
-
-The log file is overwritten on every run and contains three sections per project:
-
-> `test-result.log` is listed in `.gitignore` — it is a local artefact and is not committed.
+```bash
+ng test --no-watch --code-coverage
+```
 
 ---
 
@@ -297,50 +291,57 @@ The log file is overwritten on every run and contains three sections per project
 
 ### How it works
 
-MSW uses a **Service Worker** registered in each app's `public/` folder to intercept `fetch` requests at the network level. The worker is started automatically at bootstrap **only on `localhost`** — it is a no-op in production builds.
+MSW uses a browser **Service Worker** to intercept `fetch` requests at network level.
+In this project, the worker is started from Angular bootstrap in development and test bootstrap.
 
 ```
-Bootstrap (localhost only)
-  └── bootstrap.ts
-        └── import './mocks/browser'
+Bootstrap
+  └── src/main.ts (dev)
+    └── import '@mocks/browser'
               └── setupWorker(...handlers)   ← MSW Service Worker
-                    └── worker.start()       ← registered in <project>/public/mockServiceWorker.js
+        └── worker.start()       ← /mockServiceWorker.js
+
+Tests
+  └── src/test.ts
+    └── import '@mocks/browser'
+      └── worker.start() / worker.stop()
 ```
 
 ### File layout
 
-See the [Project layout](#project-layout) tree above. The relevant files are:
+The relevant files are:
 
-- `mocks/` — shared fixture data and handlers (workspace root)
-- `src/mocks/browser.ts` — per-app Service Worker setup
-
-The shell aggregates **both** handler sets so a single worker intercepts every API call regardless of which MFE originated it. Each standalone MFE registers only its own handlers for independent `ng serve`.
+- `mocks/browser.ts` — `setupWorker` + `worker.start({ onUnhandledRequest: 'bypass' })`
+- `mocks/handlers/posts.ts` — social media API handlers
+- `mocks/handlers/index.ts` — handler barrel exports
+- `mocks/db.ts` — typed mock fixture data (`socialPostsDb`)
+- `src/mockServiceWorker.js` — worker script served at `/mockServiceWorker.js`
+- `src/main.ts` and `src/test.ts` — worker startup wiring
 
 ### Mock data (`mocks/db.ts`)
 
-Types are defined inline in `db.ts` (not imported from MFE source) to avoid cross-project TypeScript compilation boundaries.
+`mocks/db.ts` contains the typed post fixtures used by handlers.
 
 ### Handlers (`mocks/handlers/`)
 
 All handlers simulate realistic network latency via MSW's `delay()` helper.
 
-| Method | URL                 | Response | Delay  |
-| ------ | ------------------- | -------- | ------ |
-| `GET`  | `             `     |          | 400 ms |
-| `GET`  | `                 ` |          | 300 ms |
-| `GET`  | `            `      |          | 400 ms |
-| `GET`  | `                `  |          | 300 ms |
+| Method | URL                       | Response                                                     | Delay  |
+| ------ | ------------------------- | ------------------------------------------------------------ | ------ |
+| `GET`  | `/social/posts`           | post list (newest first, engagement randomized per response) | 300 ms |
+| `GET`  | `/social/posts/:id`       | single post by id                                            | 200 ms |
+| `POST` | `/social/posts/:id/likes` | liked post payload                                           | 150 ms |
 
 The base URL matches the `API_BASE_URL` token value: `https://api-gateway.example.com/v1`.
 
 ### Activating the mocks
 
-MSW is **active by default on `localhost`** — no flags or environment variables needed. The check in `bootstrap.ts` is:
+MSW is enabled in non-production app bootstrap and in test bootstrap.
 
 ```typescript
-if (typeof window !== 'undefined' && location.hostname === 'localhost') {
-  const { worker } = await import('./mocks/browser');
-  await worker.start({ onUnhandledRequest: 'bypass' });
+if (!environment.production) {
+  const { startMockWorker } = await import('@mocks/browser');
+  await startMockWorker();
 }
 ```
 
@@ -352,21 +353,19 @@ To **disable** the mocks while keeping `ng serve` running, open DevTools and unr
 
 1. Add your fixture records to `mocks/db.ts`.
 2. Add a handler to the relevant file in `mocks/handlers/` (or create a new one).
-3. Register the handler in the appropriate `browser.ts` files.
+3. Export the handler from `mocks/handlers/index.ts`.
 
 ```typescript
-// mocks/handlers/customers.ts
-http.get(`${BASE}/customers/:id/orders`, async ({ params }) => {
+// mocks/handlers/posts.ts
+http.get(`${BASE}/social/posts/:id`, async ({ params }) => {
   await delay(200);
-  return HttpResponse.json(ordersDb.filter(o => o.customerId === params['id']));
+  return HttpResponse.json(socialPostsDb.find(p => p.id === params['id']));
 }),
 ```
 
 ### MSW and unit tests
 
-MSW's **`msw/node`** (`mocks/server.ts`) is **not used in unit tests**. Importing it causes the `@angular/build:unit-test` Vitest runner to hang indefinitely due to Node HTTP patching conflicts. Unit tests use Angular's `HttpTestingController` instead.
-
-`mocks/server.ts` is kept for use in future **integration or e2e** test suites that run outside the Angular test builder (e.g. Playwright, or a plain Vitest config targeting Node).
+Browser MSW is started in Karma tests through `src/test.ts`. Keep unit tests deterministic by mocking services or HTTP calls where needed.
 
 ---
 
