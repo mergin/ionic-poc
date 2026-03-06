@@ -35,6 +35,13 @@ node >= 22
 npm  >= 11
 ```
 
+If you use nvm, run:
+
+```bash
+nvm install 22
+nvm use
+```
+
 > This project pins its package manager via `"packageManager": "npm@11.8.0"` in `package.json`.
 > If you use [Corepack](https://nodejs.org/api/corepack.html), run `corepack enable` once so npm is
 > automatically resolved to the pinned version on every `npm` invocation.
@@ -78,25 +85,19 @@ npm run start
 
 ## How to build
 
-````bash
+```bash
 # Full production build
 npm run build
-
-
-## Server-side rendering (SSR)
-
-All three applications are configured for Angular SSR via `@angular/ssr`. SSR is enabled automatically
-in production builds — no extra flags are needed.
-
+```
 
 ## Linting and formatting
 
 ### Commands
 
-| Command                      | What it does                                               |
-| ---------------------------- | ---------------------------------------------------------- |
-| `npm run lint`               | Lint all three projects sequentially (with `--fix`)        |
-| `npm run format`             | Format all `.ts`, `.html`, `.scss` files under `src/` |
+| Command          | What it does                                          |
+| ---------------- | ----------------------------------------------------- |
+| `npm run lint`   | Lint all three projects sequentially (with `--fix`)   |
+| `npm run format` | Format all `.ts`, `.html`, `.scss` files under `src/` |
 
 ### Linting
 
@@ -131,8 +132,8 @@ Prettier is configured in `.prettierrc`. Key settings:
 
 [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) run automatically on every `git commit`, processing only the staged files:
 
-| Staged file          | Steps run                           |
-| -------------------- | ----------------------------------- |
+| Staged file     | Steps run                           |
+| --------------- | ----------------------------------- |
 | `src/**/*.ts`   | `eslint --fix` → `prettier --write` |
 | `src/**/*.html` | `eslint --fix` → `prettier --write` |
 | `src/**/*.scss` | `prettier --write`                  |
@@ -154,7 +155,7 @@ Use modern `@use` syntax instead of deprecated `@import`:
 
 // ❌ Avoid: Deprecated @import syntax
 @import '../../../styles/utilities';
-````
+```
 
 When using `@use`, access namespace members with the dot notation (e.g., `utilities.$breakpoints`, `mixins.flex-center`).
 
