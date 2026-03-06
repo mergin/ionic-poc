@@ -1,19 +1,22 @@
 @if (loading()) {
-  <ion-item>
+  <ion-item
+    role="status"
+    aria-live="polite"
+  >
     <ion-label>{{ 'social.loading' | translate }}</ion-label>
   </ion-item>
 } @else if (errorMessageKey()) {
-  <ion-item>
+  <ion-item
+    role="alert"
+    aria-live="assertive"
+  >
     <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
   </ion-item>
 } @else {
-  <ion-list>
+  <ion-list [attr.aria-label]="'social.feedAriaLabel' | translate">
     @for (post of posts(); track post.id) {
       <ion-item>
-        <ion-avatar
-          aria-hidden="true"
-          slot="start"
-        >
+        <ion-avatar slot="start">
           <img
             [alt]="'social.avatarAlt' | translate: { name: post.author.displayName }"
             [ngSrc]="post.avatarUrl"

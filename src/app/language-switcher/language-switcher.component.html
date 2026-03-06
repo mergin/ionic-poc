@@ -1,10 +1,15 @@
-<ion-buttons slot="end">
+<ion-buttons
+  slot="end"
+  [attr.aria-label]="'common.languageSelector' | translate"
+>
   <span class="language-label">
     {{ 'common.language' | translate }}
   </span>
   <ion-button
     fill="clear"
     size="small"
+    [attr.aria-label]="'common.switchToEnglish' | translate"
+    [attr.aria-pressed]="activeLang() === 'en'"
     [strong]="activeLang() === 'en'"
     (click)="setLanguage('en')"
   >
@@ -13,6 +18,8 @@
   <ion-button
     fill="clear"
     size="small"
+    [attr.aria-label]="'common.switchToSpanish' | translate"
+    [attr.aria-pressed]="activeLang() === 'es'"
     [strong]="activeLang() === 'es'"
     (click)="setLanguage('es')"
   >

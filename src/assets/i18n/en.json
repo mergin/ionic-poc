@@ -1,6 +1,9 @@
 {
   "common": {
-    "language": "Language"
+    "language": "Language",
+    "languageSelector": "Language selector",
+    "switchToEnglish": "Switch language to English",
+    "switchToSpanish": "Switch language to Spanish"
   },
   "tabs": {
     "tab1": "Tab 1",
@@ -11,13 +14,15 @@
   },
   "explore": {
     "prefix": "Explore",
-    "uiComponents": "UI Components"
+    "uiComponents": "UI Components",
+    "uiComponentsLinkAria": "UI Components (opens in a new tab)"
   },
   "social": {
     "loading": "Loading posts...",
     "loadError": "Unable to load posts.",
     "like": "Like",
     "replies": "Replies",
-    "avatarAlt": "{{name}} avatar"
+    "avatarAlt": "{{name}} avatar",
+    "feedAriaLabel": "Social media posts"
   }
 }

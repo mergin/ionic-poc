@@ -1,6 +1,9 @@
 {
   "common": {
-    "language": "Idioma"
+    "language": "Idioma",
+    "languageSelector": "Selector de idioma",
+    "switchToEnglish": "Cambiar idioma a inglés",
+    "switchToSpanish": "Cambiar idioma a español"
   },
   "tabs": {
     "tab1": "Pestaña 1",
@@ -11,13 +14,15 @@
   },
   "explore": {
     "prefix": "Explora",
-    "uiComponents": "Componentes de UI"
+    "uiComponents": "Componentes de UI",
+    "uiComponentsLinkAria": "Componentes de UI (se abre en una pestaña nueva)"
   },
   "social": {
     "loading": "Cargando publicaciones...",
     "loadError": "No se pudieron cargar las publicaciones.",
     "like": "Me gusta",
     "replies": "Respuestas",
-    "avatarAlt": "Avatar de {{name}}"
+    "avatarAlt": "Avatar de {{name}}",
+    "feedAriaLabel": "Publicaciones de redes sociales"
   }
 }

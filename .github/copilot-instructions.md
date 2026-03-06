@@ -59,6 +59,18 @@ workspace conventions.
 - Use `ngSrc` (`NgOptimizedImage`) for static image resources when applicable.
 - Avoid arrow functions and complex inline transformations in templates.
 
+## Accessibility (Ionic + Mobile Web)
+
+- Treat accessibility as a default requirement for all UI changes.
+- Never disable zoom in viewport settings (do not use `user-scalable=no`, fixed min/max scale locks).
+- Every interactive control (buttons, links, toggles, icon-only actions) must have an accessible name (`aria-label` or visible text).
+- Use `aria-live` regions for async loading/error states that need to be announced by screen readers.
+- Use semantic structure and landmarks where practical; avoid using non-interactive elements as interactive controls.
+- Keep visible focus indicators; do not remove outlines unless a clear accessible replacement is provided.
+- Ensure non-decorative images have meaningful `alt` text; mark decorative visuals as `aria-hidden="true"`.
+- For links opening new tabs/windows, provide accessible context (e.g., label indicates it opens in a new tab).
+- Prefer Ionic components and theme tokens in ways that preserve contrast and touch-target usability.
+
 ## Services
 
 - Keep services single-responsibility and provide them with `providedIn: 'root'`.
