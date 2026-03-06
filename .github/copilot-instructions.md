@@ -18,6 +18,22 @@ workspace conventions.
   - `services/` for Angular API services
   - `index.ts` barrel exports in each folder
 
+## Internationalization (ngx-translate 17)
+
+- `@ngx-translate/core` and `@ngx-translate/http-loader` are required and already installed.
+- Keep global i18n provider wiring in `src/main.ts` using:
+  - `provideTranslateService(...)`
+  - `provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' })`
+- Keep default and fallback language as English (`en`) unless explicitly requested otherwise.
+- Translation files must live in `src/assets/i18n/`.
+- Maintain at least these locales:
+  - `src/assets/i18n/en.json`
+  - `src/assets/i18n/es.json`
+- Any new user-facing literal added to templates/components must be translated and added to both locale files.
+- Prefer `TranslatePipe` in templates (`{{ 'key.path' | translate }}`) over hardcoded strings.
+- Use stable, domain-based key names (e.g., `social.loading`, `tabs.tab1`, `common.language`).
+- In unit tests for components that use translation pipes/directives, provide `provideTranslateService()` in TestBed.
+
 ## TypeScript Best Practices
 
 - Use strict typing and prefer explicit domain types.

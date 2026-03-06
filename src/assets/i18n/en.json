@@ -1,0 +1,23 @@
+{
+  "common": {
+    "language": "Language"
+  },
+  "tabs": {
+    "tab1": "Tab 1",
+    "tab2": "Tab 2",
+    "tab3": "Tab 3",
+    "tab2Page": "Tab 2 page",
+    "tab3Page": "Tab 3 page"
+  },
+  "explore": {
+    "prefix": "Explore",
+    "uiComponents": "UI Components"
+  },
+  "social": {
+    "loading": "Loading posts...",
+    "loadError": "Unable to load posts.",
+    "like": "Like",
+    "replies": "Replies",
+    "avatarAlt": "{{name}} avatar"
+  }
+}

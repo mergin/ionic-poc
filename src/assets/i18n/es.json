@@ -1,0 +1,23 @@
+{
+  "common": {
+    "language": "Idioma"
+  },
+  "tabs": {
+    "tab1": "Pestaña 1",
+    "tab2": "Pestaña 2",
+    "tab3": "Pestaña 3",
+    "tab2Page": "Página de la pestaña 2",
+    "tab3Page": "Página de la pestaña 3"
+  },
+  "explore": {
+    "prefix": "Explora",
+    "uiComponents": "Componentes de UI"
+  },
+  "social": {
+    "loading": "Cargando publicaciones...",
+    "loadError": "No se pudieron cargar las publicaciones.",
+    "like": "Me gusta",
+    "replies": "Respuestas",
+    "avatarAlt": "Avatar de {{name}}"
+  }
+}

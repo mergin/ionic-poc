@@ -1,5 +1,6 @@
 import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import {
   IonCardTitle,
@@ -24,6 +25,7 @@ import { SocialMediaApiService } from '@app/social-media/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
+    TranslatePipe,
     NgOptimizedImage,
     IonAvatar,
     IonCardSubtitle,
@@ -42,7 +44,7 @@ export class SocialMediaComponent implements OnInit {
 
   protected readonly posts = signal<SocialMediaPost[]>([]);
   protected readonly loading = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly errorMessageKey = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadPosts();
@@ -61,7 +63,7 @@ export class SocialMediaComponent implements OnInit {
 
   private loadPosts(): void {
     this.loading.set(true);
-    this.errorMessage.set(null);
+    this.errorMessageKey.set(null);
 
     this.socialMediaApiService
       .getPosts()
@@ -72,7 +74,7 @@ export class SocialMediaComponent implements OnInit {
           this.loading.set(false);
         },
         error: () => {
-          this.errorMessage.set('Unable to load posts.');
+          this.errorMessageKey.set('social.loadError');
           this.loading.set(false);
         },
       });

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EnvironmentInjector, inject } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { triangle, ellipse, square } from 'ionicons/icons';
 
@@ -8,7 +9,7 @@ import { triangle, ellipse, square } from 'ionicons/icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
-  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, TranslatePipe],
 })
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);

@@ -1,10 +1,10 @@
 @if (loading()) {
   <ion-item>
-    <ion-label>Loading posts...</ion-label>
+    <ion-label>{{ 'social.loading' | translate }}</ion-label>
   </ion-item>
-} @else if (errorMessage()) {
+} @else if (errorMessageKey()) {
   <ion-item>
-    <ion-label>{{ errorMessage() }}</ion-label>
+    <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
   </ion-item>
 } @else {
   <ion-list>
@@ -22,7 +22,7 @@
             <ion-item>
               <ion-avatar slot="start">
                 <img
-                  [alt]="post.author.displayName + ' avatar'"
+                  [alt]="'social.avatarAlt' | translate: { name: post.author.displayName }"
                   [ngSrc]="post.avatarUrl"
                   width="80"
                   height="80"
@@ -36,9 +36,11 @@
             fill="clear"
             (click)="likePost(post.id)"
           >
-            Like ({{ post.likes }})
+            {{ 'social.like' | translate }} ({{ post.likes }})
           </ion-button>
-          <ion-button fill="clear">Replies ({{ post.replies }})</ion-button>
+          <ion-button fill="clear"
+            >{{ 'social.replies' | translate }} ({{ post.replies }})</ion-button
+          >
         </ion-card>
       </ion-item>
     }

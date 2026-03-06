@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 
-import { Tab2Page } from './tab2.page';
+import { LanguageSwitcherComponent } from './language-switcher.component';
 
-describe('Tab2Page', () => {
-  let component: Tab2Page;
-  let fixture: ComponentFixture<Tab2Page>;
+describe('LanguageSwitcherComponent', () => {
+  let component: LanguageSwitcherComponent;
+  let fixture: ComponentFixture<LanguageSwitcherComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Tab2Page],
+      imports: [LanguageSwitcherComponent],
       providers: [provideTranslateService()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Tab2Page);
+    fixture = TestBed.createComponent(LanguageSwitcherComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

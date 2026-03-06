@@ -1,0 +1,21 @@
+<ion-buttons slot="end">
+  <span class="language-label">
+    {{ 'common.language' | translate }}
+  </span>
+  <ion-button
+    fill="clear"
+    size="small"
+    [strong]="activeLang() === 'en'"
+    (click)="setLanguage('en')"
+  >
+    EN
+  </ion-button>
+  <ion-button
+    fill="clear"
+    size="small"
+    [strong]="activeLang() === 'es'"
+    (click)="setLanguage('es')"
+  >
+    ES
+  </ion-button>
+</ion-buttons>

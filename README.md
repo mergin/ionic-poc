@@ -392,11 +392,11 @@ with [`@ngx-translate/http-loader`](https://github.com/ngx-translate/http-loader
 
 ```
 Bootstrap (shell)
-  └── app.config.ts
-        ├── provideTranslateService({ lang: 'en', defaultLanguage: 'en' })
+  └── src/main.ts
+        ├── provideTranslateService({ lang: 'en', fallbackLang: 'en' })
         │     └── triggers translate.use('en') at bootstrap
-        │           └── HTTP GET /i18n/en.json  ← loaded once, cached for the session
-        └── provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' })
+        │           └── HTTP GET /assets/i18n/en.json  ← loaded once, cached for the session
+        └── provideTranslateHttpLoader({ prefix: '/assets/i18n/', suffix: '.json' })
 ```
 
 `TranslateService` is provided **once in the shell** and shared as a singleton with all MFEs via
@@ -412,16 +412,25 @@ Templates use the `TranslatePipe` to render keys:
 
 ### Translation files
 
-All translation files live under **`src/public/i18n/`** — they are served as static
+All translation files live under **`src/assets/i18n/`** — they are served as static
 assets by the shell and loaded at runtime via HTTP.
 
 | File                      | Language |
 | ------------------------- | -------- |
-| `src/public/i18n/en.json` | English  |
+| `src/assets/i18n/en.json` | English  |
+| `src/assets/i18n/es.json` | Spanish  |
+
+### i18n quick checklist
+
+- Keep global provider wiring in `src/main.ts` with `provideTranslateService(...)` and `provideTranslateHttpLoader(...)`.
+- Keep English as default and fallback (`lang: 'en'`, `fallbackLang: 'en'`) unless requirements say otherwise.
+- Add every new user-facing literal as a translation key in both `en.json` and `es.json`.
+- Prefer `{{ 'key.path' | translate }}` in templates over hardcoded UI strings.
+- For specs that render translated templates, provide `provideTranslateService()` in `TestBed`.
 
 ### Adding a new language
 
-1. Create `src/public/i18n/<locale>.json` with the same key structure as `en.json`.
+1. Create `src/assets/i18n/<locale>.json` with the same key structure as `en.json`.
 2. Switch the active language at runtime:
 
 ```typescript
@@ -429,7 +438,7 @@ import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 const translate = inject(TranslateService);
-translate.use('fr'); // triggers GET /i18n/fr.json on first call
+translate.use('fr'); // triggers GET /assets/i18n/fr.json on first call
 ```
 
 The loader caches each locale after the first load — subsequent `use('fr')` calls do not fire a

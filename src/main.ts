@@ -7,6 +7,8 @@ import {
   PreloadAllModules,
 } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateService } from '@ngx-translate/core';
 
 import { AppComponent } from '@app/app.component';
 import { routes } from '@app/app.routes';
@@ -23,6 +25,14 @@ async function bootstrap(): Promise<void> {
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       provideIonicAngular(),
       provideHttpClient(),
+      provideTranslateService({
+        lang: 'en',
+        fallbackLang: 'en',
+        loader: provideTranslateHttpLoader({
+          prefix: '/assets/i18n/',
+          suffix: '.json',
+        }),
+      }),
       provideRouter(routes, withPreloading(PreloadAllModules)),
     ],
   });

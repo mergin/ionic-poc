@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { SocialMediaComponent } from '@app/social-media/social-media.component';
@@ -35,7 +36,10 @@ describe('SocialMediaComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [IonicModule.forRoot(), SocialMediaComponent],
-      providers: [{ provide: SocialMediaApiService, useValue: socialMediaApiServiceSpy }],
+      providers: [
+        provideTranslateService(),
+        { provide: SocialMediaApiService, useValue: socialMediaApiServiceSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SocialMediaComponent);
