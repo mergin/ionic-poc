@@ -31,10 +31,19 @@ export class SocialMediaComponent implements OnInit {
   protected readonly loading = signal(false);
   protected readonly errorMessageKey = signal<string | null>(null);
 
+  /**
+   * Initializes the component by loading social media posts.
+   * @returns void
+   */
   ngOnInit(): void {
     this.loadPosts();
   }
 
+  /**
+   * Likes a post and updates it in local component state.
+   * @param postId Unique post identifier.
+   * @returns void
+   */
   protected likePost(postId: string): void {
     this.socialMediaApiService
       .likePost(postId)
@@ -46,6 +55,10 @@ export class SocialMediaComponent implements OnInit {
       });
   }
 
+  /**
+   * Loads posts from the API and updates loading/error signals.
+   * @returns void
+   */
   private loadPosts(): void {
     this.loading.set(true);
     this.errorMessageKey.set(null);

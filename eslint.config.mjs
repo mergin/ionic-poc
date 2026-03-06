@@ -5,6 +5,7 @@ import json from '@eslint/json';
 import css from '@eslint/css';
 import angularTemplatePlugin from '@angular-eslint/eslint-plugin-template';
 import angularTemplateParser from '@angular-eslint/template-parser';
+import jsdocPlugin from 'eslint-plugin-jsdoc';
 import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
@@ -18,6 +19,23 @@ export default defineConfig([
   {
     files: ['**/*.{ts,mts,cts}'],
     extends: tseslint.configs.recommended,
+    plugins: { jsdoc: jsdocPlugin },
+    rules: {
+      'jsdoc/require-jsdoc': [
+        'warn',
+        {
+          contexts: ['FunctionDeclaration', 'MethodDefinition'],
+          publicOnly: false,
+          require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+          },
+        },
+      ],
+      'jsdoc/require-param': 'warn',
+      'jsdoc/require-returns': 'warn',
+      'jsdoc/no-types': 'warn',
+    },
   },
 
   // JSONC files — JSON with comments (tsconfigs, VS Code config, *.jsonc)

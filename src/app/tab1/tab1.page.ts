@@ -21,5 +21,9 @@ import { SocialMediaComponent } from '@app/social-media/social-media.component';
   ],
 })
 export class Tab1Page {
+  /**
+   * Creates the first tab page component.
+   * @returns void
+   */
   constructor() {}
 }

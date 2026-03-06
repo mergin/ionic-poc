@@ -11,17 +11,28 @@ const BASE = 'https://api-gateway.example.com/v1/social/posts';
 export class SocialMediaApiService {
   private readonly httpClient = inject(HttpClient);
 
-  /** Fetches all posts ordered by API default sorting. */
+  /**
+   * Fetches all posts ordered by API default sorting.
+   * @returns Stream with all social media posts.
+   */
   getPosts(): Observable<SocialMediaPost[]> {
     return this.httpClient.get<SocialMediaPost[]>(BASE);
   }
 
-  /** Fetches one post by unique identifier. */
+  /**
+   * Fetches one post by unique identifier.
+   * @param postId Unique post identifier.
+   * @returns Stream with the selected post.
+   */
   getPostById(postId: string): Observable<SocialMediaPost> {
     return this.httpClient.get<SocialMediaPost>(`${BASE}/${postId}`);
   }
 
-  /** Likes a post and returns its updated state. */
+  /**
+   * Likes a post and returns its updated state.
+   * @param postId Unique post identifier.
+   * @returns Stream with the updated post data.
+   */
   likePost(postId: string): Observable<SocialMediaPost> {
     return this.httpClient.post<SocialMediaPost>(`${BASE}/${postId}/likes`, {});
   }

@@ -14,6 +14,10 @@ import { triangle, ellipse, square } from 'ionicons/icons';
 export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
 
+  /**
+   * Registers tab icons used by the bottom tab bar.
+   * @returns void
+   */
   constructor() {
     addIcons({ triangle, ellipse, square });
   }

@@ -147,5 +147,9 @@ workspace conventions.
 
 ## Documentation
 
-- Add brief JSDoc to public classes and public methods in services/components.
+- Every method/function (public, protected, and private) must include JSDoc.
+- Every method/function JSDoc must include:
+  - `@param` for each parameter.
+  - `@returns` for the return value (`@returns void` when no value is returned).
+- Do not include TypeScript types in JSDoc tags (`@param` / `@returns`); rely on TypeScript signatures for typing.
 - Keep documentation concise and behavior-oriented.

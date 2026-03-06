@@ -14,6 +14,10 @@ import { AppComponent } from '@app/app.component';
 import { routes } from '@app/app.routes';
 import { environment } from './environments/environment';
 
+/**
+ * Bootstraps the Ionic Angular application and starts MSW in non-production environments.
+ * @returns Resolves when Angular application bootstrap is complete.
+ */
 async function bootstrap(): Promise<void> {
   if (!environment.production) {
     const { startMockWorker } = await import('@mocks/browser');
