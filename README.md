@@ -24,9 +24,25 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 
 ### Key design decisions
 
-         |
+- Ionic 8 + Angular 20 with a single app under `src/`.
+- Mock-first development via MSW handlers in `mocks/handlers`.
+- Domain-oriented social media code split into `models/` and `services/`.
+- Absolute import aliases for app and mocks (`@app/*`, `@mocks/*`).
 
 ### Project layout
+
+```text
+src/
+  app/
+    social-media/
+      models/
+      services/
+mocks/
+  handlers/
+scripts/
+```
+
+---
 
 ## Prerequisites
 
@@ -64,6 +80,8 @@ That's it — no additional setup steps are needed. The MSW Service Worker file 
 `src/mockServiceWorker.js` (served at `/mockServiceWorker.js`), so you don't need to run
 `npx msw init` manually.
 
+---
+
 ## Workspace conventions
 
 - Use absolute imports with aliases:
@@ -83,12 +101,16 @@ That's it — no additional setup steps are needed. The MSW Service Worker file 
 npm run start
 ```
 
+---
+
 ## How to build
 
 ```bash
 # Full production build
 npm run build
 ```
+
+---
 
 ## Linting and formatting
 
@@ -162,6 +184,8 @@ When using `@use`, access namespace members with the dot notation (e.g., `utilit
 ### CSS Variables vs SCSS Variables
 
 **Use CSS custom properties (CSS variables) by default** — they are available at runtime, can be overridden dynamically, and work directly in templates.
+
+---
 
 ## Commit conventions
 
@@ -237,22 +261,21 @@ chore(deps): bump typescript     # `chore` is not a valid type — use `build`
 
 ## Running tests
 
-### Testing conventions
-
-Common patterns across all projects:
-
 ### Commands
-
-### Quick run
 
 ```bash
 # Run all tests once (no watch mode)
 npm test
+
+# Run tests with coverage and save full output to test-log.log
+npm run test:log
+
+# Run tests with coverage directly via Angular CLI
+ng test --no-watch --code-coverage
 ```
 
-### What is tested
-
-                                                                                                                                 |
+`npm run test:log` shows only a running status and final summary in the terminal.
+Detailed test output is written to `test-log.log` at the project root (ignored by git).
 
 ### Testing conventions
 
@@ -273,16 +296,6 @@ Common patterns across all projects:
 - **Globals**: Jasmine globals (`describe`, `it`, `expect`, etc.)
 
 > **Note:** Browser MSW is started in `src/test.ts`. Keep unit tests deterministic by mocking services or HTTP calls where needed.
-
----
-
-### Coverage
-
-Use Angular/Karma coverage flags directly when needed:
-
-```bash
-ng test --no-watch --code-coverage
-```
 
 ---
 
@@ -394,7 +407,7 @@ another network request.
 Templates use the `TranslatePipe` to render keys:
 
 ```html
-<!-- static key -->
+<h2>{{ 'customers.list.title' | translate }}</h2>
 ```
 
 ### Translation files
@@ -405,8 +418,6 @@ assets by the shell and loaded at runtime via HTTP.
 | File                      | Language |
 | ------------------------- | -------- |
 | `src/public/i18n/en.json` | English  |
-
-#### Key structure (`en.json`)
 
 ### Adding a new language
 

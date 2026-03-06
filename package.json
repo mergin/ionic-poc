@@ -9,6 +9,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch",
+    "test:log": "bash ./scripts/test-log.sh",
     "lint": "ng lint --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
     "clean": "rm -rf .angular package-lock.json dist/ node_modules/",
