@@ -1,17 +1,5 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>{{ 'tabs.tab1' | translate }}</ion-title>
-    <app-language-switcher />
-  </ion-toolbar>
-</ion-header>
+<app-header [title]="'tabs.tab1' | translate" />
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ 'tabs.tab1' | translate }}</ion-title>
-      <app-language-switcher />
-    </ion-toolbar>
-  </ion-header>
-
   <app-social-media />
 </ion-content>

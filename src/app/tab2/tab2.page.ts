@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { LanguageSwitcherComponent } from '@app/language-switcher/language-switcher.component';
+import { HeaderComponent } from '@app/header/header.component';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 
 @Component({
@@ -10,15 +10,7 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    ExploreContainerComponent,
-    TranslatePipe,
-    LanguageSwitcherComponent,
-  ],
+  imports: [IonContent, ExploreContainerComponent, TranslatePipe, HeaderComponent],
 })
 export class Tab2Page {
   /**
