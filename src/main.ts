@@ -11,6 +11,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideTranslateService } from '@ngx-translate/core';
 
 import { AppComponent } from '@app/app.component';
+import { authInterceptor } from '@app/core/auth-interceptor/auth.interceptor';
 import { apiErrorInterceptor } from '@app/core/error-interceptor/api-error.interceptor';
 import { routes } from '@app/app.routes';
 import { environment } from './environments/environment';
@@ -29,7 +30,7 @@ async function bootstrap(): Promise<void> {
     providers: [
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       provideIonicAngular(),
-      provideHttpClient(withInterceptors([apiErrorInterceptor])),
+      provideHttpClient(withInterceptors([authInterceptor, apiErrorInterceptor])),
       provideTranslateService({
         lang: 'en',
         fallbackLang: 'en',

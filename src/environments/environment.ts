@@ -4,6 +4,11 @@
 
 export const environment = {
   production: false,
+  auth: {
+    sessionStorageTokenKey: 'access_token',
+    cookieTokenKey: 'access_token',
+    developmentFakeToken: 'dev-fake-access-token',
+  },
   apiErrorRetry: {
     maxAttempts: 2,
     baseDelayMs: 500,

@@ -14,6 +14,7 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 - [Styling](#styling)
 - [Commit conventions](#commit-conventions)
 - [Running tests](#running-tests)
+- [HTTP auth interceptor](#http-auth-interceptor)
 - [HTTP error interceptor](#http-error-interceptor)
 - [API mocking with MSW](#api-mocking-with-msw)
 - [Internationalization (i18n)](#internationalization-i18n)
@@ -298,6 +299,64 @@ Common patterns across all projects:
 - **Globals**: Jasmine globals (`describe`, `it`, `expect`, etc.)
 
 > **Note:** Browser MSW is started in `src/test.ts`. Keep unit tests deterministic by mocking services or HTTP calls where needed.
+
+---
+
+## HTTP auth interceptor
+
+Global auth header injection is implemented in:
+
+- `src/app/core/auth-interceptor/auth.interceptor.ts`
+
+It is registered in bootstrap via:
+
+```typescript
+provideHttpClient(withInterceptors([authInterceptor, apiErrorInterceptor]));
+```
+
+### Behavior
+
+- Function-based interceptor (`HttpInterceptorFn`).
+- Adds `Authorization: Bearer <token>` when a token is available.
+- Keeps an existing `Authorization` header unchanged.
+- Resolves token source priority in this order:
+  1. `sessionStorage`
+  2. browser cookie
+  3. development fake token (non-production only)
+
+### Environment configuration
+
+Auth parameters are configurable in both environment files:
+
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
+
+```typescript
+export const environment = {
+  production: false,
+  auth: {
+    sessionStorageTokenKey: 'access_token',
+    cookieTokenKey: 'access_token',
+    developmentFakeToken: 'dev-fake-access-token',
+  },
+};
+```
+
+In production mode, the fake token is never used.
+
+### Unit tests
+
+Coverage for this behavior lives in:
+
+- `src/app/core/auth-interceptor/auth.interceptor.spec.ts`
+
+The spec validates:
+
+- header injection from `sessionStorage`,
+- cookie fallback when `sessionStorage` has no token,
+- development fake-token fallback,
+- no fake token in production,
+- preserving pre-existing Authorization headers.
 
 ---
 
@@ -628,7 +687,7 @@ Or read it from an environment variable / Angular build-time token as required b
 
 ### 2. Auth token source
 
-In `src/app/core/auth.interceptor.ts`, replace the `sessionStorage` stub:
+In `src/app/core/auth-interceptor/auth.interceptor.ts`, replace the development/local token strategy with your real auth provider integration:
 
 ```typescript
 // Replace this:
