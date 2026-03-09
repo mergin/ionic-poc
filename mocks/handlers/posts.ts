@@ -3,9 +3,23 @@ import { socialPostsDb, type MockSocialPost } from '@mocks/db';
 
 const BASE = 'https://api-gateway.example.com/v1';
 
+const DELAY = {
+  short: 150,
+  medium: 200,
+  long: 300,
+} as const;
+
+/**
+ * Randomizes the engagement metrics of a social media post.
+ * @param post The social media post to randomize.
+ * @returns The social media post with randomized engagement metrics.
+ */
 function randomizeEngagement(post: MockSocialPost): MockSocialPost {
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const likesBoost = Math.floor(Math.random() * 7);
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const repliesBoost = Math.floor(Math.random() * 3);
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const repostsBoost = Math.floor(Math.random() * 2);
 
   return {
@@ -18,7 +32,7 @@ function randomizeEngagement(post: MockSocialPost): MockSocialPost {
 
 export const socialMediaHandlers = [
   http.get(`${BASE}/social/posts`, async () => {
-    await delay(300);
+    await delay(DELAY.long);
 
     const posts = [...socialPostsDb]
       .sort(
@@ -31,7 +45,7 @@ export const socialMediaHandlers = [
   }),
 
   http.get(`${BASE}/social/posts/:id`, async ({ params }) => {
-    await delay(200);
+    await delay(DELAY.medium);
 
     const post = socialPostsDb.find(({ id }) => id === params['id']);
     if (!post) {
@@ -42,7 +56,7 @@ export const socialMediaHandlers = [
   }),
 
   http.post(`${BASE}/social/posts/:id/likes`, async ({ params }) => {
-    await delay(150);
+    await delay(DELAY.short);
 
     const post = socialPostsDb.find(({ id }) => id === params['id']);
     if (!post) {

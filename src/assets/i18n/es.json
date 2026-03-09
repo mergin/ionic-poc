@@ -3,7 +3,8 @@
     "language": "Idioma",
     "languageSelector": "Selector de idioma",
     "switchToEnglish": "Cambiar idioma a inglés",
-    "switchToSpanish": "Cambiar idioma a español"
+    "switchToSpanish": "Cambiar idioma a español",
+    "dismiss": "Cerrar"
   },
   "tabs": {
     "tab1": "Pestaña 1",
@@ -24,5 +25,21 @@
     "replies": "Respuestas",
     "avatarAlt": "Avatar de {{name}}",
     "feedAriaLabel": "Publicaciones de redes sociales"
+  },
+  "tab2Feature": {
+    "ariaLabel": "Funcionalidad CSS moderna de la pestaña 2",
+    "eyebrow": "Laboratorio CSS moderno",
+    "title": "Container Queries + Glass Mesh",
+    "description": "Un panel responsive que se adapta al tamaño de su contenedor y usa gradientes por capas basados en el tema para un estilo móvil moderno y pulido.",
+    "chips": {
+      "containerQueries": "Container Queries",
+      "glassMesh": "Glass Mesh",
+      "themeAware": "Basado en tema"
+    }
+  },
+  "errors": {
+    "network": "Problema de conexión. Revisa tu internet e inténtalo de nuevo.",
+    "server": "Error del servidor. Inténtalo nuevamente en un momento.",
+    "generic": "Algo salió mal. Inténtalo de nuevo."
   }
 }

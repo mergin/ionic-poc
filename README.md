@@ -14,6 +14,7 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 - [Styling](#styling)
 - [Commit conventions](#commit-conventions)
 - [Running tests](#running-tests)
+- [HTTP error interceptor](#http-error-interceptor)
 - [API mocking with MSW](#api-mocking-with-msw)
 - [Internationalization (i18n)](#internationalization-i18n)
 - [Adapting for production](#adapting-for-production)
@@ -87,6 +88,7 @@ That's it — no additional setup steps are needed. The MSW Service Worker file 
 - Use absolute imports with aliases:
   - `@app/*` → `src/app/*`
   - `@mocks/*` → `mocks/*`
+  - `@env/*` → `src/environments/*`
 - API requests are mocked with MSW in development and tests.
 - The social media mock API handlers are in `mocks/handlers/posts.ts`.
 - Angular social media API models/services are in `src/app/social-media/models` and `src/app/social-media/services`.
@@ -296,6 +298,149 @@ Common patterns across all projects:
 - **Globals**: Jasmine globals (`describe`, `it`, `expect`, etc.)
 
 > **Note:** Browser MSW is started in `src/test.ts`. Keep unit tests deterministic by mocking services or HTTP calls where needed.
+
+---
+
+## HTTP error interceptor
+
+Global API error handling is implemented in:
+
+- `src/app/core/error-interceptor/api-error.interceptor.ts`
+
+It is registered in bootstrap via `provideHttpClient(withInterceptors([apiErrorInterceptor]))` in `src/main.ts`.
+
+### Behavior
+
+- Retries transient failures with exponential backoff.
+- Handles terminal request failures with an accessible Ionic toast (`ion-toast`).
+- Logs detailed error data to `console.error` in development only.
+- Supports per-request opt-out through `HttpContext`.
+
+### Retry policy
+
+The interceptor retries only transient errors:
+
+- Network failures (`status === 0`)
+- Server failures (`status >= 500`)
+
+Backoff formula:
+
+$$
+delay = baseDelayMs \times 2^{(retryCount - 1)}
+$$
+
+With current defaults:
+
+- Attempt 1 retry delay: `500ms`
+- Attempt 2 retry delay: `1000ms`
+
+After all retries are exhausted, the interceptor shows a translated toast and rethrows the original error.
+
+### Environment configuration
+
+Retry parameters are configurable in both environment files:
+
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
+
+```typescript
+export const environment = {
+  production: false,
+  apiErrorRetry: {
+    maxAttempts: 2,
+    baseDelayMs: 500,
+  },
+};
+```
+
+If values are missing or invalid, the interceptor falls back to safe defaults (`maxAttempts: 2`, `baseDelayMs: 500`).
+
+### Opt-out with HttpContext
+
+Use `IGNORE_API_ERROR_HANDLING` when a request should bypass retry, toast, and interceptor logging:
+
+```typescript
+import { HttpContext } from '@angular/common/http';
+import { IGNORE_API_ERROR_HANDLING } from '@app/core/error-interceptor/api-error.interceptor';
+
+const context = new HttpContext().set(IGNORE_API_ERROR_HANDLING, true);
+
+this.http.get('/some/endpoint', { context });
+```
+
+### Toast and accessibility
+
+On terminal errors, the interceptor creates a translated toast with:
+
+- position: `top`
+- color: `danger`
+- dismiss action from i18n key `common.dismiss`
+- accessibility attributes: `role="alert"`, `aria-live="assertive"`
+
+Error message keys used:
+
+- `errors.network`
+- `errors.server`
+- `errors.generic`
+
+### Unit tests
+
+Coverage for this behavior lives in:
+
+- `src/app/core/error-interceptor/api-error.interceptor.spec.ts`
+
+The spec validates:
+
+- exponential backoff retry path,
+- success after retry without showing toast,
+- ignore-context bypass behavior,
+- dev-only logging vs production behavior.
+
+### Troubleshooting
+
+When debugging a specific endpoint, use one of these approaches to reduce interceptor side effects:
+
+- Bypass interceptor handling for one request with `HttpContext`:
+
+```typescript
+const context = new HttpContext().set(IGNORE_API_ERROR_HANDLING, true);
+this.http.get('/debug/endpoint', { context });
+```
+
+- Temporarily disable retries by setting `apiErrorRetry.maxAttempts` to `0` in `src/environments/environment.ts`.
+- Keep `production: false` locally to preserve console diagnostics from the interceptor.
+
+If you still see repeated failures, verify whether the endpoint returns `status >= 500` or `status === 0`, because those conditions are intentionally retryable.
+
+### Manual retry test (MSW)
+
+Use this temporary handler to force a retryable failure:
+
+```typescript
+// mocks/handlers/posts.ts (temporary debug handler)
+http.get(`${BASE}/debug/retry`, async () => {
+  await delay(50);
+  return new HttpResponse(null, { status: 503, statusText: 'Service Unavailable' });
+});
+```
+
+Then call it from any component/service using `HttpClient`:
+
+```typescript
+this.http.get('/debug/retry').subscribe({
+  next: () => {},
+  error: () => {},
+});
+```
+
+Expected result with current defaults (`maxAttempts: 2`, `baseDelayMs: 500`):
+
+- initial request fails,
+- retry after `500ms`,
+- retry after `1000ms`,
+- final error toast shown and error rethrown.
+
+Remove the temporary handler after validation to avoid affecting other local flows.
 
 ---
 

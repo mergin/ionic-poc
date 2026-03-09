@@ -5,7 +5,8 @@
     "baseUrl": "./",
     "paths": {
       "@mocks/*": ["mocks/*"],
-      "@app/*": ["src/app/*"]
+      "@app/*": ["src/app/*"],
+      "@env/*": ["src/environments/*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

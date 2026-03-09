@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   RouteReuseStrategy,
@@ -11,6 +11,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideTranslateService } from '@ngx-translate/core';
 
 import { AppComponent } from '@app/app.component';
+import { apiErrorInterceptor } from '@app/core/error-interceptor/api-error.interceptor';
 import { routes } from '@app/app.routes';
 import { environment } from './environments/environment';
 
@@ -28,7 +29,7 @@ async function bootstrap(): Promise<void> {
     providers: [
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       provideIonicAngular(),
-      provideHttpClient(),
+      provideHttpClient(withInterceptors([apiErrorInterceptor])),
       provideTranslateService({
         lang: 'en',
         fallbackLang: 'en',

@@ -21,6 +21,19 @@ export default defineConfig([
     extends: tseslint.configs.recommended,
     plugins: { jsdoc: jsdocPlugin },
     rules: {
+      '@typescript-eslint/no-magic-numbers': [
+        'error',
+        {
+          ignore: [0, 1, -1],
+          ignoreEnums: true,
+          ignoreNumericLiteralTypes: true,
+          ignoreReadonlyClassProperties: true,
+          ignoreTypeIndexes: true,
+          ignoreDefaultValues: true,
+          enforceConst: true,
+          detectObjects: false,
+        },
+      ],
       'jsdoc/require-jsdoc': [
         'warn',
         {

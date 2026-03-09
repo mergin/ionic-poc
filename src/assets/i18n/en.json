@@ -3,7 +3,8 @@
     "language": "Language",
     "languageSelector": "Language selector",
     "switchToEnglish": "Switch language to English",
-    "switchToSpanish": "Switch language to Spanish"
+    "switchToSpanish": "Switch language to Spanish",
+    "dismiss": "Dismiss"
   },
   "tabs": {
     "tab1": "Tab 1",
@@ -24,5 +25,21 @@
     "replies": "Replies",
     "avatarAlt": "{{name}} avatar",
     "feedAriaLabel": "Social media posts"
+  },
+  "tab2Feature": {
+    "ariaLabel": "Tab 2 modern CSS feature",
+    "eyebrow": "Modern CSS Lab",
+    "title": "Container Queries + Glass Mesh",
+    "description": "A responsive panel that adapts to its container size and uses layered theme-aware gradients for a polished, modern mobile look.",
+    "chips": {
+      "containerQueries": "Container Queries",
+      "glassMesh": "Glass Mesh",
+      "themeAware": "Theme-Aware"
+    }
+  },
+  "errors": {
+    "network": "Connection issue. Check your internet and try again.",
+    "server": "Server error. Please try again in a moment.",
+    "generic": "Something went wrong. Please try again."
   }
 }
