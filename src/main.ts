@@ -1,4 +1,5 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAppInitializer, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   RouteReuseStrategy,
@@ -8,7 +9,8 @@ import {
 } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 import { AppComponent } from '@app/app.component';
 import { authInterceptor } from '@app/core/auth-interceptor/auth.interceptor';
@@ -38,6 +40,11 @@ async function bootstrap(): Promise<void> {
           prefix: '/assets/i18n/',
           suffix: '.json',
         }),
+      }),
+      provideAppInitializer(() => {
+        const translateService = inject(TranslateService);
+        translateService.setFallbackLang('en');
+        return firstValueFrom(translateService.use('en'));
       }),
       provideRouter(routes, withPreloading(PreloadAllModules)),
     ],

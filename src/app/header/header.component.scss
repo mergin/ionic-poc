@@ -2,6 +2,10 @@
   display: contents;
 }
 
+ion-toolbar {
+  --min-height: var(--app-toolbar-min-height, 56px);
+}
+
 .language-label {
   align-items: center;
   color: var(--ion-color-medium);

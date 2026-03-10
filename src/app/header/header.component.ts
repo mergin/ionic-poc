@@ -57,10 +57,11 @@ export class HeaderComponent implements OnInit {
 
   protected readonly activeLang = signal<SupportedLang>('en');
 
-  private _popover = viewChild.required<IonPopover>('popover');
+  private _popover = viewChild<IonPopover>('popover');
 
   /**
-   *
+   * Creates the header component and registers icon assets.
+   * @returns void
    */
   constructor() {
     this.registerIcons();
@@ -73,24 +74,31 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     const storedLang = localStorage.getItem('app.lang');
     const initialLang: SupportedLang = storedLang === 'es' ? 'es' : 'en';
-    this.setLanguage(initialLang, false);
+    this.setLanguage(initialLang, false, false);
   }
 
   /**
    * Updates the active language and optionally persists user preference.
    * @param language Language code to apply.
    * @param persist Whether to persist the selected language in localStorage.
+   * @param dismissPopover Whether to dismiss the language popover after applying the language.
    * @returns void
    */
-  protected setLanguage(language: SupportedLang, persist = true): void {
+  protected setLanguage(language: SupportedLang, persist = true, dismissPopover = true): void {
     this.activeLang.set(language);
-    this.translateService.use(language);
+    this.translateService.resetLang(language);
+    const languageLoad = this.translateService.use(language) as
+      | { subscribe?: () => void }
+      | undefined;
+    languageLoad?.subscribe?.();
 
     if (persist) {
       localStorage.setItem('app.lang', language);
     }
 
-    this._popover().dismiss();
+    if (dismissPopover) {
+      void this._popover()?.dismiss();
+    }
   }
 
   /**

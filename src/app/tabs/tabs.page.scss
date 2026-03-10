@@ -1,0 +1,11 @@
+:host {
+  --app-toolbar-min-height: 56px;
+}
+
+:host-context(.ios) {
+  --app-toolbar-min-height: 44px;
+}
+
+ion-tabs {
+  padding-top: var(--app-toolbar-min-height);
+}
