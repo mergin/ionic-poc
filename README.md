@@ -2,11 +2,25 @@
 
 An Ionic / Angular **proof-of-concept** built with Angular 20.
 
+> [!TIP]
+> **TL;DR — Testing quickstart**
+>
+> ```bash
+> npm run test:render
+> npm run test:e2e:install
+> npm run test:e2e
+> ```
+>
+> Render tests validate component/page output quickly (`src/app/**/*.render.spec.ts`).
+> E2E tests validate full user journeys in a real browser (`e2e/`).
+> Full details: [Running tests](#running-tests).
+
 ## Table of contents
 
 - [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
 - [Getting started](#getting-started)
+- [Testing quickstart](#testing-quickstart)
 - [Workspace conventions](#workspace-conventions)
 - [How to run](#how-to-run)
 - [How to build](#how-to-build)
@@ -81,6 +95,27 @@ npm install
 That's it — no additional setup steps are needed. The MSW Service Worker file lives under
 `src/mockServiceWorker.js` (served at `/mockServiceWorker.js`), so you don't need to run
 `npx msw init` manually.
+
+---
+
+## Testing quickstart
+
+Use this short flow to run UI-focused tests locally:
+
+```bash
+# Render tests (Angular Testing Library + Karma/Jasmine)
+npm run test:render
+
+# Install Playwright browser once
+npm run test:e2e:install
+
+# E2E tests (Playwright)
+npm run test:e2e
+```
+
+- Render tests live in `src/app/**/*.render.spec.ts` and validate component/page output quickly.
+- E2E tests live in `e2e/` and validate full user journeys in a real browser.
+- For detailed guidance and test strategy, see the [Running tests](#running-tests) section.
 
 ---
 
@@ -270,6 +305,15 @@ chore(deps): bump typescript     # `chore` is not a valid type — use `build`
 # Run all tests once (no watch mode)
 npm test
 
+# Run render tests (Angular Testing Library + Karma/Jasmine)
+npm run test:render
+
+# Install Playwright browser (first time only)
+npm run test:e2e:install
+
+# Run E2E tests (Playwright)
+npm run test:e2e
+
 # Run tests with coverage and save full output to test-log.log
 npm run test:log
 
@@ -279,6 +323,75 @@ ng test --no-watch --code-coverage
 
 `npm run test:log` shows only a running status and final summary in the terminal.
 Detailed test output is written to `test-log.log` at the project root (ignored by git).
+
+### Render testing vs E2E testing
+
+Both are required and they validate different risks.
+
+#### Render testing
+
+- **Goal:** Validate component/page rendering and UI states in isolation.
+- **Tooling:** Angular Testing Library + Jasmine/Karma.
+- **Location:** `src/app/**/*.render.spec.ts`.
+- **Speed:** Fast, suitable for broad UI coverage.
+- **Best for:**
+  - translated labels,
+  - conditional UI states (`loading`, `error`, `empty`),
+  - component-level accessibility labels,
+  - wiring of inputs/outputs and page composition.
+
+Render tests do **not** replace full browser journey checks (routing transitions, real popovers, real app bootstrap timing).
+
+#### E2E testing
+
+- **Goal:** Validate real user flows in a real browser against a running app.
+- **Tooling:** Playwright.
+- **Location:** `e2e/**/*.spec.ts`, organized by domain/flow.
+- **Speed:** Slower than render tests, higher confidence for integrations.
+- **Best for:**
+  - tab navigation and routing,
+  - language switching flow,
+  - end-to-end social feed rendering,
+  - cross-component behaviors and lifecycle interactions.
+
+### E2E file structure
+
+E2E tests are centralized under `e2e/` and organized by behavior instead of component:
+
+```text
+e2e/
+  smoke/
+    app-shell.spec.ts
+  flows/
+    tabs-navigation.spec.ts
+  i18n/
+    language-switch.spec.ts
+  social/
+    social-feed.spec.ts
+```
+
+This keeps tests aligned with user journeys and avoids brittle, duplicated "one-file-per-component" E2E suites.
+
+### CI for render + E2E
+
+- Workflow: `.github/workflows/tests.yml`
+- Runs on push/PR:
+  1. `npm ci`
+  2. `npm run test:render`
+  3. `npm run test:e2e`
+- Uploads Playwright artifacts:
+  - `playwright-report`
+  - `test-results/playwright`
+
+### Playwright artifacts and debugging
+
+`playwright.config.ts` is configured for CI-friendly diagnostics:
+
+- HTML report output: `playwright-report/`
+- Trace: `on-first-retry`
+- Screenshot: `only-on-failure`
+- Video: `retain-on-failure`
+- Raw outputs: `test-results/playwright/`
 
 ### Testing conventions
 

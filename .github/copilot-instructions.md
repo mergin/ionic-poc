@@ -145,6 +145,35 @@ workspace conventions.
 - One error or empty-state behavior when relevant.
 - Interaction/event behavior for user-triggered actions.
 
+## Render Testing (Angular Testing Library)
+
+- Use Angular Testing Library for render-focused tests under `src/app/**/*.render.spec.ts`.
+- Render tests complement unit specs and should validate real template output with lightweight setup.
+- Keep render tests focused on:
+  - translated labels/keys,
+  - component composition,
+  - loading/error/empty states,
+  - accessibility labels and visible content.
+- For components using translation pipes, provide `provideTranslateService()` in render tests.
+- Mock service dependencies with existing `*.service.spy.ts` factories when available.
+- Keep AAA comments mandatory (`// ARRANGE`, `// ACT`, `// ASSERT`, and `// CLEANUP` when needed).
+
+## E2E Testing (Playwright)
+
+- E2E tests live in the centralized `e2e/` folder, grouped by behavior/flow, not by component.
+- Preferred structure:
+  - `e2e/smoke` for app boot/critical availability checks.
+  - `e2e/flows` for navigation and cross-screen user journeys.
+  - `e2e/i18n` for language switching and locale-specific UI behavior.
+  - `e2e/social` (or domain folders) for domain-specific journeys.
+- Use Playwright for full-browser assertions that are hard to guarantee in render tests:
+  - routing transitions,
+  - overlays/popovers,
+  - persisted UI preferences,
+  - multi-component integration behavior.
+- Keep E2E specs deterministic and concise, with one primary journey per test.
+- Use resilient selectors (accessible names, stable attributes, semantic locators) over fragile CSS chains.
+
 ## Documentation
 
 - Every method/function (public, protected, and private) must include JSDoc.
