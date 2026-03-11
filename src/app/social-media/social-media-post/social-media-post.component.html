@@ -1,0 +1,25 @@
+<ion-item>
+  <ion-avatar slot="start">
+    <img
+      [alt]="'social.avatarAlt' | translate: { name: post().author.displayName }"
+      [ngSrc]="post().avatarUrl"
+      width="80"
+      height="80"
+    />
+  </ion-avatar>
+
+  <ion-label>
+    <strong>{{ post().author.displayName }}</strong>
+    <br />
+    <p>@{{ post().author.handle }}</p>
+    <ion-text>{{ post().content }}</ion-text>
+    <br />
+  </ion-label>
+
+  <div
+    class="metadata-end-wrapper"
+    slot="end"
+  >
+    <ion-note color="medium">{{ post().timestamp | date: 'short' }}</ion-note>
+  </div>
+</ion-item>

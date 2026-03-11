@@ -15,45 +15,7 @@
 } @else {
   <ion-list [attr.aria-label]="'social.feedAriaLabel' | translate">
     @for (post of posts(); track post.id) {
-      <ion-item>
-        <ion-avatar slot="start">
-          <img
-            [alt]="'social.avatarAlt' | translate: { name: post.author.displayName }"
-            [ngSrc]="post.avatarUrl"
-            width="80"
-            height="80"
-          />
-        </ion-avatar>
-
-        <!-- content -->
-        <ion-label>
-          <strong>{{ post.author.displayName }}</strong>
-          <br />
-          <p>@{{ post.author.handle }}</p>
-          <ion-text>{{ post.content }}</ion-text>
-          <br />
-
-          <!-- TODO: buttons -->
-          <!-- <ion-note
-            color="medium"
-            class="ion-text-wrap"
-          >
-            <ion-icon
-              name="heart-outline"
-              size="small"
-              color="red"
-            />
-          </ion-note> -->
-        </ion-label>
-
-        <!-- date -->
-        <div
-          class="metadata-end-wrapper"
-          slot="end"
-        >
-          <ion-note color="medium">{{ post.timestamp | date: 'short' }}</ion-note>
-        </div>
-      </ion-item>
+      <social-media-post [post]="post" />
     }
   </ion-list>
 }

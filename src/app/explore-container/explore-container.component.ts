@@ -9,5 +9,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   imports: [TranslatePipe],
 })
 export class ExploreContainerComponent {
+  /**
+   * Label shown inside the explore container content area.
+   */
   @Input() name?: string;
 }

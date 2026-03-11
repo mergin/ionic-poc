@@ -180,5 +180,7 @@ workspace conventions.
 - Every method/function JSDoc must include:
   - `@param` for each parameter.
   - `@returns` for the return value (`@returns void` when no value is returned).
+- Every component `input()` and `output()` must include a brief comment describing purpose/behavior.
+- For `input()`/`output()` comments, do not document TypeScript type details or whether the value is required; rely on TypeScript signatures for that metadata.
 - Do not include TypeScript types in JSDoc tags (`@param` / `@returns`); rely on TypeScript signatures for typing.
 - Keep documentation concise and behavior-oriented.

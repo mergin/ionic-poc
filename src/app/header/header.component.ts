@@ -49,7 +49,7 @@ type SupportedLang = 'en' | 'es';
 })
 export class HeaderComponent implements OnInit {
   /**
-   * Title text to display in the header, passed as an input property.
+   * Title shown in the header toolbar.
    */
   title = input.required<string>();
 

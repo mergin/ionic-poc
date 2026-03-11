@@ -1,10 +1,10 @@
-import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import { take } from 'rxjs';
-import { IonList, IonItem, IonLabel, IonAvatar, IonNote, IonText } from '@ionic/angular/standalone';
+import { IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
 
 import type { SocialMediaPost } from '@app/social-media/models';
+import { SocialMediaPostComponent } from '@app/social-media/social-media-post';
 import { SocialMediaApiService } from '@app/social-media/services';
 
 @Component({
@@ -12,17 +12,7 @@ import { SocialMediaApiService } from '@app/social-media/services';
   templateUrl: './social-media.component.html',
   styleUrls: ['./social-media.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    IonText,
-    IonNote,
-    DatePipe,
-    TranslatePipe,
-    NgOptimizedImage,
-    IonAvatar,
-    IonLabel,
-    IonItem,
-    IonList,
-  ],
+  imports: [IonItem, IonLabel, IonList, SocialMediaPostComponent, TranslatePipe],
 })
 export class SocialMediaComponent implements OnInit {
   private readonly socialMediaApiService = inject(SocialMediaApiService);
