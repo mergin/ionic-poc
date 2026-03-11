@@ -1,3 +1,5 @@
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAppInitializer, inject } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -17,6 +19,8 @@ import { authInterceptor } from '@app/core/auth-interceptor/auth.interceptor';
 import { apiErrorInterceptor } from '@app/core/error-interceptor/api-error.interceptor';
 import { routes } from '@app/app.routes';
 import { environment } from './environments/environment';
+
+registerLocaleData(localeEs);
 
 /**
  * Bootstraps the Ionic Angular application and starts MSW in non-production environments.

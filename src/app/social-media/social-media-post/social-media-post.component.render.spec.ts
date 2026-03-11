@@ -40,7 +40,7 @@ describe('SocialMediaPostComponent rendering', () => {
     expect(content).toBeTruthy();
   });
 
-  it('should expose avatar image with alt text', async () => {
+  it('should mark avatar image as decorative', async () => {
     // ARRANGE
     const post: SocialMediaPost = {
       id: 'post-002',
@@ -69,6 +69,7 @@ describe('SocialMediaPostComponent rendering', () => {
 
     // ASSERT
     expect(avatar).not.toBeNull();
-    expect(avatar?.getAttribute('alt')).toBeTruthy();
+    expect(avatar?.getAttribute('alt')).toBe('');
+    expect(avatar?.getAttribute('aria-hidden')).toBe('true');
   });
 });

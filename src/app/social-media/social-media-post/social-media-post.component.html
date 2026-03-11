@@ -1,7 +1,12 @@
-<ion-item>
+<ion-item
+  role="article"
+  [attr.aria-labelledby]="'social-post-title-' + post().id"
+  [attr.aria-describedby]="'social-post-body-' + post().id"
+>
   <ion-avatar slot="start">
     <img
-      [alt]="'social.avatarAlt' | translate: { name: post().author.displayName }"
+      alt=""
+      aria-hidden="true"
       [ngSrc]="post().avatarUrl"
       width="80"
       height="80"
@@ -9,17 +14,22 @@
   </ion-avatar>
 
   <ion-label>
-    <strong>{{ post().author.displayName }}</strong>
-    <br />
+    <strong [attr.id]="'social-post-title-' + post().id">{{ post().author.displayName }}</strong>
     <p>@{{ post().author.handle }}</p>
-    <ion-text>{{ post().content }}</ion-text>
-    <br />
+    <ion-text [attr.id]="'social-post-body-' + post().id">{{ post().content }}</ion-text>
   </ion-label>
 
   <div
     class="metadata-end-wrapper"
     slot="end"
   >
-    <ion-note color="medium">{{ post().timestamp | date: 'short' }}</ion-note>
+    <ion-note
+      class="post-datetime"
+      color="medium"
+    >
+      <time [attr.datetime]="post().timestamp">{{
+        post().timestamp | date: 'short' : undefined : activeLocale()
+      }}</time>
+    </ion-note>
   </div>
 </ion-item>
