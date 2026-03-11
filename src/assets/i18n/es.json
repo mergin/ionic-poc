@@ -22,6 +22,8 @@
     "loading": "Cargando publicaciones...",
     "loadError": "No se pudieron cargar las publicaciones.",
     "like": "Me gusta",
+    "repostAriaLabel": "Repostear",
+    "favoriteAriaLabel": "Favorito",
     "replies": "Respuestas",
     "avatarAlt": "Avatar de {{name}}",
     "feedAriaLabel": "Publicaciones de redes sociales"

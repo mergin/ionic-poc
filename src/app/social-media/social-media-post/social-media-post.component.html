@@ -17,6 +17,10 @@
     <strong [attr.id]="'social-post-title-' + post().id">{{ post().author.displayName }}</strong>
     <p>@{{ post().author.handle }}</p>
     <ion-text [attr.id]="'social-post-body-' + post().id">{{ post().content }}</ion-text>
+    <social-media-buttons
+      (repostRequested)="onRepostRequested()"
+      (likeRequested)="onLikeRequested()"
+    />
   </ion-label>
 
   <div

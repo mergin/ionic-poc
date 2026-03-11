@@ -1,0 +1,31 @@
+<ion-buttons class="post-actions">
+  <ion-button
+    class="repost-button"
+    size="small"
+    fill="clear"
+    type="button"
+    [attr.aria-label]="'social.repostAriaLabel' | translate"
+    (click)="requestRepost()"
+  >
+    <ion-icon
+      slot="icon-only"
+      name="repeat"
+      aria-hidden="true"
+    />
+  </ion-button>
+
+  <ion-button
+    class="favorite-button"
+    size="small"
+    fill="clear"
+    type="button"
+    [attr.aria-label]="'social.favoriteAriaLabel' | translate"
+    (click)="requestLike()"
+  >
+    <ion-icon
+      slot="icon-only"
+      name="heart"
+      aria-hidden="true"
+    />
+  </ion-button>
+</ion-buttons>

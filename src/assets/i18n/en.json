@@ -22,6 +22,8 @@
     "loading": "Loading posts...",
     "loadError": "Unable to load posts.",
     "like": "Like",
+    "repostAriaLabel": "Repost",
+    "favoriteAriaLabel": "Favorite",
     "replies": "Replies",
     "avatarAlt": "{{name}} avatar",
     "feedAriaLabel": "Social media posts"

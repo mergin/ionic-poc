@@ -15,7 +15,11 @@
 } @else {
   <ion-list [attr.aria-label]="'social.feedAriaLabel' | translate">
     @for (post of posts(); track post.id) {
-      <social-media-post [post]="post" />
+      <social-media-post
+        [post]="post"
+        (repostRequested)="repostPost($event)"
+        (likeRequested)="likePost($event)"
+      />
     }
   </ion-list>
 }

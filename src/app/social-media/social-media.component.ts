@@ -46,6 +46,16 @@ export class SocialMediaComponent implements OnInit {
   }
 
   /**
+   * Handles repost requests from post action controls.
+   * @param postId Unique post identifier.
+   * @returns void
+   */
+  protected repostPost(postId: string): void {
+    // TODO: Connect repost action to SocialMediaApiService once repost endpoint is available.
+    void postId;
+  }
+
+  /**
    * Loads posts from the API and updates loading/error signals.
    * @returns void
    */

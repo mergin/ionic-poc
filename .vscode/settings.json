@@ -8,5 +8,6 @@
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "chat.tools.terminal.autoApprove": {
     "npx playwright": true
-  }
+  },
+  "cSpell.words": ["repost"]
 }
