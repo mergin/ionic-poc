@@ -4,9 +4,9 @@
  * `setupMswServer()` helper that wires everything up automatically.
  */
 import { setupServer } from 'msw/node';
-import { socialMediaHandlers } from '@mocks/handlers';
+import { handlers } from '@mocks/handlers';
 
-export const server = setupServer(...socialMediaHandlers);
+export const server = setupServer(...handlers);
 
 /**
  * Call once at suite-level (outside describe) to wire beforeAll / afterEach /

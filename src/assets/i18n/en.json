@@ -28,6 +28,12 @@
     "avatarAlt": "{{name}} avatar",
     "feedAriaLabel": "Social media posts"
   },
+  "gallery": {
+    "loading": "Loading images...",
+    "loadError": "Unable to load images.",
+    "feedAriaLabel": "Image gallery",
+    "imageAlt": "Photo by {{author}}"
+  },
   "tab2Feature": {
     "ariaLabel": "Tab 2 modern CSS feature",
     "eyebrow": "Modern CSS Lab",

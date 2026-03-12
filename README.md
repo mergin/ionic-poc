@@ -644,10 +644,12 @@ The relevant files are:
 
 - `mocks/browser.ts` — `setupWorker` + `worker.start({ onUnhandledRequest: 'bypass' })`
 - `mocks/handlers/posts.ts` — social media API handlers
+- `mocks/handlers/picsum.ts` — Picsum list/info/image handlers
 - `mocks/handlers/index.ts` — handler barrel exports
 - `mocks/db.ts` — typed mock fixture data (`socialPostsDb`)
 - `src/mockServiceWorker.js` — worker script served at `/mockServiceWorker.js`
 - `src/main.ts` and `src/test.ts` — worker startup wiring
+- `proxy.conf.json` — dev proxy from `/picsum` to `https://picsum.photos`
 
 ### Mock data (`mocks/db.ts`)
 
@@ -662,6 +664,10 @@ All handlers simulate realistic network latency via MSW's `delay()` helper.
 | `GET`  | `/social/posts`           | post list (newest first, engagement randomized per response) | 300 ms |
 | `GET`  | `/social/posts/:id`       | single post by id                                            | 200 ms |
 | `POST` | `/social/posts/:id/likes` | liked post payload                                           | 150 ms |
+| `GET`  | `/picsum/v2/list`         | Picsum image list                                            | 250 ms |
+| `GET`  | `/picsum/id/:id/info`     | Picsum image metadata by id                                  | 200 ms |
+| `GET`  | `/picsum/seed/:seed/info` | Picsum image metadata by seed                                | 200 ms |
+| `GET`  | `/picsum/*`               | dynamic image responses                                      | 150 ms |
 
 The base URL matches the `API_BASE_URL` token value: `https://api-gateway.example.com/v1`.
 
@@ -679,6 +685,21 @@ if (!environment.production) {
 `onUnhandledRequest: 'bypass'` means any request that does not match a handler (e.g. federation `remoteEntry.json` fetches) passes through to the network unchanged.
 
 To **disable** the mocks while keeping `ng serve` running, open DevTools and unregister the Service Worker under **Application → Service Workers**.
+
+### Picsum real mode and proxy
+
+`ImageGalleryComponent` controls Picsum mode through `useMockPicsumApi`:
+
+- `true` → MSW mock responses (`__msw=mock`)
+- `false` → real Picsum network requests (`__msw=real`)
+
+By default, `PicsumService` uses `environment.apiUrls.picsumBaseUrl` (currently `/picsum`).
+During local development, Angular dev server proxies this path to `https://picsum.photos`
+via `proxy.conf.json` and the `serve.options.proxyConfig` entry in `angular.json`.
+
+If you change proxy settings, restart `ng serve` to apply them.
+Calling `https://picsum.photos` directly from the browser may fail with CORS errors; use
+the `/picsum` same-origin route instead.
 
 ### Adding a new handler
 

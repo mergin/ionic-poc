@@ -77,6 +77,7 @@ workspace conventions.
 - Keep services single-responsibility and provide them with `providedIn: 'root'`.
 - Prefer observable-returning APIs for async data (`Observable<T>`).
 - Keep transport mapping and error handling inside services, not components.
+- Keep API base URLs in `src/environments/environment.ts` and `src/environments/environment.prod.ts`; do not hardcode API URLs in services.
 - Add concise JSDoc for public service methods.
 - Every service must live in its own folder under the domain `services/` directory.
 - Each service folder must contain:

@@ -1,7 +1,7 @@
 import { setupWorker } from 'msw/browser';
-import { socialMediaHandlers } from '@mocks/handlers';
+import { handlers } from '@mocks/handlers';
 
-export const worker = setupWorker(...socialMediaHandlers);
+export const worker = setupWorker(...handlers);
 
 export async function startMockWorker(): Promise<void> {
   await worker.start({

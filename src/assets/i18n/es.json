@@ -28,6 +28,12 @@
     "avatarAlt": "Avatar de {{name}}",
     "feedAriaLabel": "Publicaciones de redes sociales"
   },
+  "gallery": {
+    "loading": "Cargando imagenes...",
+    "loadError": "No se pudieron cargar las imagenes.",
+    "feedAriaLabel": "Galeria de imagenes",
+    "imageAlt": "Foto de {{author}}"
+  },
   "tab2Feature": {
     "ariaLabel": "Funcionalidad CSS moderna de la pestaña 2",
     "eyebrow": "Laboratorio CSS moderno",

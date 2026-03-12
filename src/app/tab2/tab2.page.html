@@ -1,3 +1,9 @@
 <ion-content [fullscreen]="true">
-  <app-explore-container name="tabs.tab2Page" />
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <ion-refresher-content />
+  </ion-refresher>
+  <app-image-gallery />
 </ion-content>

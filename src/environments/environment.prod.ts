@@ -12,4 +12,7 @@ export const environment = {
   apiErrorToast: {
     durationMs: 4500,
   },
+  apiUrls: {
+    picsumBaseUrl: '/picsum',
+  },
 };

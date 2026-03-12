@@ -1,0 +1,24 @@
+@if (loading()) {
+  <ion-item
+    role="status"
+    aria-live="polite"
+  >
+    <ion-label>{{ 'gallery.loading' | translate }}</ion-label>
+  </ion-item>
+} @else if (errorMessageKey()) {
+  <ion-item
+    role="alert"
+    aria-live="assertive"
+  >
+    <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
+  </ion-item>
+} @else {
+  <ion-list [attr.aria-label]="'gallery.feedAriaLabel' | translate">
+    @for (image of images(); track image.id) {
+      <ion-img
+        [src]="getImageSource(image)"
+        [alt]="'gallery.imageAlt' | translate: { author: image.author }"
+      />
+    }
+  </ion-list>
+}
