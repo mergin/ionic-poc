@@ -83,7 +83,6 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
  * Logs error details only in development mode.
  * @param error The error caught by the interceptor.
  * @param url The URL associated with the failed request.
- * @returns void
  */
 function logErrorInDevelopment(error: unknown, url: string): void {
   if (environment.production) {

@@ -61,7 +61,6 @@ export class HeaderComponent implements OnInit {
 
   /**
    * Creates the header component and registers icon assets.
-   * @returns void
    */
   constructor() {
     this.registerIcons();
@@ -69,7 +68,6 @@ export class HeaderComponent implements OnInit {
 
   /**
    * Initializes the language selector from persisted user preference.
-   * @returns void
    */
   ngOnInit(): void {
     const storedLang = localStorage.getItem('app.lang');
@@ -82,7 +80,6 @@ export class HeaderComponent implements OnInit {
    * @param language Language code to apply.
    * @param persist Whether to persist the selected language in localStorage.
    * @param dismissPopover Whether to dismiss the language popover after applying the language.
-   * @returns void
    */
   protected setLanguage(language: SupportedLang, persist = true, dismissPopover = true): void {
     this.activeLang.set(language);
@@ -103,7 +100,6 @@ export class HeaderComponent implements OnInit {
 
   /**
    * Registers icon assets used by this component.
-   * @returns void
    */
   private registerIcons(): void {
     addIcons({ language });

@@ -13,7 +13,6 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 export class Tab2Page {
   /**
    * Creates the second tab page component.
-   * @returns void
    */
   constructor() {}
 }

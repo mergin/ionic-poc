@@ -13,7 +13,6 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 export class Tab3Page {
   /**
    * Creates the third tab page component.
-   * @returns void
    */
   constructor() {}
 }

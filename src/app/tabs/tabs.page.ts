@@ -31,7 +31,6 @@ export class TabsPage {
 
   /**
    * Registers tab icons used by the bottom tab bar.
-   * @returns void
    */
   constructor() {
     addIcons({ triangle, ellipse, square });
@@ -41,7 +40,6 @@ export class TabsPage {
    * Updates the active tab state when IonTabs emits tab-change events.
    * @param event IonTabs change event containing selected tab id.
    * @param event.tab
-   * @returns void
    */
   protected onTabChange(event: { tab: string }): void {
     const selectedTab = event.tab;

@@ -58,7 +58,6 @@ export class SocialMediaPostComponent {
 
   /**
    * Emits the current post id for repost handling upstream.
-   * @returns void
    */
   protected onRepostRequested(): void {
     this.repostRequested.emit(this.post().id);
@@ -66,7 +65,6 @@ export class SocialMediaPostComponent {
 
   /**
    * Emits the current post id for like handling upstream.
-   * @returns void
    */
   protected onLikeRequested(): void {
     this.likeRequested.emit(this.post().id);

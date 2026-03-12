@@ -24,7 +24,6 @@ export class SocialMediaButtonsComponent {
 
   /**
    * Creates the component and registers action icons.
-   * @returns void
    */
   constructor() {
     this.registerIcons();
@@ -32,7 +31,6 @@ export class SocialMediaButtonsComponent {
 
   /**
    * Registers icon assets used by action buttons.
-   * @returns void
    */
   private registerIcons(): void {
     addIcons({ heart, repeat });
@@ -40,7 +38,6 @@ export class SocialMediaButtonsComponent {
 
   /**
    * Handles repost button interactions.
-   * @returns void
    */
   protected requestRepost(): void {
     // TODO: Connect this event to a repost HTTP call in SocialMediaApiService.
@@ -49,7 +46,6 @@ export class SocialMediaButtonsComponent {
 
   /**
    * Handles like button interactions.
-   * @returns void
    */
   protected requestLike(): void {
     // TODO: Connect this event to a like HTTP call in the feature container.

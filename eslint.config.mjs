@@ -21,6 +21,23 @@ export default defineConfig([
     extends: tseslint.configs.recommended,
     plugins: { jsdoc: jsdocPlugin },
     rules: {
+      '@typescript-eslint/explicit-function-return-type': [
+        'error',
+        {
+          allowExpressions: false,
+          allowTypedFunctionExpressions: true,
+          allowedNames: [
+            'ngOnChanges',
+            'ngOnInit',
+            'ngDoCheck',
+            'ngAfterContentInit',
+            'ngAfterContentChecked',
+            'ngAfterViewInit',
+            'ngAfterViewChecked',
+            'ngOnDestroy',
+          ],
+        },
+      ],
       '@typescript-eslint/no-magic-numbers': [
         'error',
         {
@@ -46,7 +63,12 @@ export default defineConfig([
         },
       ],
       'jsdoc/require-param': 'warn',
-      'jsdoc/require-returns': 'warn',
+      'jsdoc/require-returns': [
+        'warn',
+        {
+          forceRequireReturn: false,
+        },
+      ],
       'jsdoc/no-types': 'warn',
     },
   },

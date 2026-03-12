@@ -40,6 +40,7 @@ workspace conventions.
 - Prefer type inference when obvious, but avoid ambiguous inferred types.
 - Avoid `any`; use `unknown` when the type is uncertain.
 - Keep functions small and pure when possible.
+- Require explicit return types on all methods/functions, except constructors and Angular lifecycle hooks.
 
 ## Angular 20 + Ionic 8 Best Practices
 
@@ -179,7 +180,7 @@ workspace conventions.
 - Every method/function (public, protected, and private) must include JSDoc.
 - Every method/function JSDoc must include:
   - `@param` for each parameter.
-  - `@returns` for the return value (`@returns void` when no value is returned).
+  - `@returns` when the method/function returns a value.
 - Every component `input()` and `output()` must include a brief comment describing purpose/behavior.
 - For `input()`/`output()` comments, do not document TypeScript type details or whether the value is required; rely on TypeScript signatures for that metadata.
 - Do not include TypeScript types in JSDoc tags (`@param` / `@returns`); rely on TypeScript signatures for typing.

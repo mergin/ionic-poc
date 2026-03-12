@@ -23,7 +23,6 @@ export class SocialMediaComponent implements OnInit {
 
   /**
    * Initializes the component by loading social media posts.
-   * @returns void
    */
   ngOnInit(): void {
     this.loadPosts();
@@ -32,7 +31,6 @@ export class SocialMediaComponent implements OnInit {
   /**
    * Likes a post and updates it in local component state.
    * @param postId Unique post identifier.
-   * @returns void
    */
   protected likePost(postId: string): void {
     this.socialMediaApiService
@@ -48,7 +46,6 @@ export class SocialMediaComponent implements OnInit {
   /**
    * Handles repost requests from post action controls.
    * @param postId Unique post identifier.
-   * @returns void
    */
   protected repostPost(postId: string): void {
     // TODO: Connect repost action to SocialMediaApiService once repost endpoint is available.
@@ -57,7 +54,6 @@ export class SocialMediaComponent implements OnInit {
 
   /**
    * Loads posts from the API and updates loading/error signals.
-   * @returns void
    */
   private loadPosts(): void {
     this.loading.set(true);

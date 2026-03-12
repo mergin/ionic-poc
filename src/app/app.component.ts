@@ -10,7 +10,6 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 export class AppComponent {
   /**
    * Creates the root application component.
-   * @returns void
    */
   constructor() {}
 }
