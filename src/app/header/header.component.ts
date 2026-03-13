@@ -25,7 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { language } from 'ionicons/icons';
 
-type SupportedLang = 'en' | 'es';
+import type { SupportedLang } from '@app/header/models';
 
 @Component({
   selector: 'app-header',
@@ -84,10 +84,7 @@ export class HeaderComponent implements OnInit {
   protected setLanguage(language: SupportedLang, persist = true, dismissPopover = true): void {
     this.activeLang.set(language);
     this.translateService.resetLang(language);
-    const languageLoad = this.translateService.use(language) as
-      | { subscribe?: () => void }
-      | undefined;
-    languageLoad?.subscribe?.();
+    this.translateService.use(language);
 
     if (persist) {
       localStorage.setItem('app.lang', language);

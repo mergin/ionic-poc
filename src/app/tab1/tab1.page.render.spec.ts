@@ -20,7 +20,7 @@ describe('Tab1Page rendering', () => {
     });
 
     // ACT
-    const feed = screen.getByLabelText('social.feedAriaLabel', {
+    const feed = await screen.findByLabelText('social.feedAriaLabel', {
       selector: 'ion-list',
     });
 

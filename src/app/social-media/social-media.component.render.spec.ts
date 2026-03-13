@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { provideTranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { NEVER, of, throwError } from 'rxjs';
 
 import { SocialMediaComponent } from '@app/social-media/social-media.component';
 import type { SocialMediaPost } from '@app/social-media/models';
@@ -39,13 +39,53 @@ describe('SocialMediaComponent rendering', () => {
     });
 
     // ACT
-    const feed = screen.getByLabelText('social.feedAriaLabel', {
+    const feed = await screen.findByLabelText('social.feedAriaLabel', {
       selector: 'ion-list',
     });
-    const author = screen.getByText('David Prieto');
+    const author = await screen.findByText('David Prieto');
 
     // ASSERT
     expect(feed).toBeTruthy();
     expect(author).toBeTruthy();
+  });
+
+  it('should render loading state while request is pending', async () => {
+    // ARRANGE
+    const socialMediaApiServiceSpy = SocialMediaApiServiceSpy.create();
+    socialMediaApiServiceSpy.getPosts.and.returnValue(NEVER);
+
+    await render(SocialMediaComponent, {
+      providers: [
+        provideTranslateService(),
+        { provide: SocialMediaApiService, useValue: socialMediaApiServiceSpy },
+      ],
+    });
+
+    // ACT
+    const loadingLabel = screen.getByText('social.loading');
+
+    // ASSERT
+    expect(loadingLabel).toBeTruthy();
+  });
+
+  it('should render error state when post loading fails', async () => {
+    // ARRANGE
+    const socialMediaApiServiceSpy = SocialMediaApiServiceSpy.create();
+    socialMediaApiServiceSpy.getPosts.and.returnValue(
+      throwError(() => new Error('Failed to load posts')),
+    );
+
+    await render(SocialMediaComponent, {
+      providers: [
+        provideTranslateService(),
+        { provide: SocialMediaApiService, useValue: socialMediaApiServiceSpy },
+      ],
+    });
+
+    // ACT
+    const errorLabel = await screen.findByText('social.loadError');
+
+    // ASSERT
+    expect(errorLabel).toBeTruthy();
   });
 });

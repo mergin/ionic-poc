@@ -12,8 +12,7 @@ import { addIcons } from 'ionicons';
 import { triangle, ellipse, square } from 'ionicons/icons';
 
 import { HeaderComponent } from '@app/header/header.component';
-
-type AppTab = 'tab1' | 'tab2' | 'tab3';
+import type { AppTab } from '@app/tabs/models';
 
 @Component({
   selector: 'app-tabs',

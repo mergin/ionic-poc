@@ -4,7 +4,9 @@
     "languageSelector": "Language selector",
     "switchToEnglish": "Switch language to English",
     "switchToSpanish": "Switch language to Spanish",
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "englishShort": "EN",
+    "spanishShort": "ES"
   },
   "tabs": {
     "tab1": "Social Media",

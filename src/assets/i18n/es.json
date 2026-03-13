@@ -4,7 +4,9 @@
     "languageSelector": "Selector de idioma",
     "switchToEnglish": "Cambiar idioma a inglés",
     "switchToSpanish": "Cambiar idioma a español",
-    "dismiss": "Cerrar"
+    "dismiss": "Cerrar",
+    "englishShort": "EN",
+    "spanishShort": "ES"
   },
   "tabs": {
     "tab1": "Red Social",

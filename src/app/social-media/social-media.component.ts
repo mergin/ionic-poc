@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { take } from 'rxjs';
 import { IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
 
 import type { SocialMediaPost } from '@app/social-media/models';
@@ -14,33 +14,43 @@ import { SocialMediaApiService } from '@app/social-media/services';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [IonItem, IonLabel, IonList, SocialMediaPostComponent, TranslatePipe],
 })
-export class SocialMediaComponent implements OnInit {
+export class SocialMediaComponent {
   private readonly socialMediaApiService = inject(SocialMediaApiService);
+  private readonly likeRequest = signal<{ postId: string; nonce: number } | undefined>(undefined);
 
-  protected readonly posts = signal<SocialMediaPost[]>([]);
-  protected readonly loading = signal(false);
-  protected readonly errorMessageKey = signal<string | null>(null);
+  private readonly postsResource = rxResource({
+    defaultValue: [] as SocialMediaPost[],
+    stream: () => this.socialMediaApiService.getPosts(),
+  });
 
-  /**
-   * Initializes the component by loading social media posts.
-   */
-  ngOnInit(): void {
-    this.loadPosts();
-  }
+  private readonly likedPostResource = rxResource({
+    params: () => this.likeRequest(),
+    stream: ({ params }) => this.socialMediaApiService.likePost(params.postId),
+  });
+
+  protected readonly posts = computed(() => {
+    const likedPost = this.likedPostResource.value();
+
+    if (likedPost === undefined) {
+      return this.postsResource.value();
+    }
+
+    return this.postsResource.value().map(post => (post.id === likedPost.id ? likedPost : post));
+  });
+  protected readonly loading = computed(() => this.postsResource.isLoading());
+  protected readonly errorMessageKey = computed(() =>
+    this.postsResource.status() === 'error' ? 'social.loadError' : null,
+  );
 
   /**
    * Likes a post and updates it in local component state.
    * @param postId Unique post identifier.
    */
   protected likePost(postId: string): void {
-    this.socialMediaApiService
-      .likePost(postId)
-      .pipe(take(1))
-      .subscribe(updatedPost => {
-        this.posts.update(posts =>
-          posts.map(post => (post.id === updatedPost.id ? updatedPost : post)),
-        );
-      });
+    this.likeRequest.update(request => ({
+      postId,
+      nonce: request === undefined ? 1 : request.nonce + 1,
+    }));
   }
 
   /**
@@ -50,27 +60,5 @@ export class SocialMediaComponent implements OnInit {
   protected repostPost(postId: string): void {
     // TODO: Connect repost action to SocialMediaApiService once repost endpoint is available.
     void postId;
-  }
-
-  /**
-   * Loads posts from the API and updates loading/error signals.
-   */
-  private loadPosts(): void {
-    this.loading.set(true);
-    this.errorMessageKey.set(null);
-
-    this.socialMediaApiService
-      .getPosts()
-      .pipe(take(1))
-      .subscribe({
-        next: posts => {
-          this.posts.set(posts);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.errorMessageKey.set('social.loadError');
-          this.loading.set(false);
-        },
-      });
   }
 }

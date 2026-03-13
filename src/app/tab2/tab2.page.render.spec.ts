@@ -21,7 +21,7 @@ describe('Tab2Page rendering', () => {
     });
 
     // ACT
-    const galleryFeed = screen.getByLabelText('gallery.feedAriaLabel');
+    const galleryFeed = await screen.findByLabelText('gallery.feedAriaLabel');
 
     // ASSERT
     expect(galleryFeed).toBeTruthy();

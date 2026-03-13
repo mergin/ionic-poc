@@ -6,6 +6,7 @@ workspace conventions.
 
 - Stack: Ionic 8 + Angular 20 + TypeScript 5 + RxJS 7.
 - App structure lives under `src/` (not `projects/`).
+- Keep domain interfaces/types in each feature's local `models/` folder (for example `src/app/<feature>/models`) and expose them via that folder's `index.ts` barrel.
 - Unit tests run with Jasmine + Karma.
 - Linting uses Angular ESLint + ESLint 9 (`npm run lint`).
 - Use absolute imports with aliases only:
@@ -48,6 +49,8 @@ workspace conventions.
 - Do NOT set `standalone: true` in decorators (Angular 20 default).
 - Prefer `inject()` over constructor injection where it improves readability.
 - Use signals (`signal`, `computed`) for local component state.
+- Keep component logic reactive-first: compose `Observable`/signal state (`toSignal`, `computed`, `effect`) and avoid imperative `subscribe()` in component classes except when bridging to imperative browser APIs.
+- For component HTTP data fetching, define view resources with `rxResource` instead of `toSignal`/manual subscription state wiring.
 - Do not use `@HostBinding` / `@HostListener`; define host metadata in the `host` object.
 - Prefer `ChangeDetectionStrategy.OnPush` for components.
 - Keep Ionic pages/components focused and small.
@@ -179,6 +182,7 @@ workspace conventions.
 ## Documentation
 
 - Every method/function (public, protected, and private) must include JSDoc.
+- Every interface and type alias declaration must include concise JSDoc.
 - Every method/function JSDoc must include:
   - `@param` for each parameter.
   - `@returns` when the method/function returns a value.

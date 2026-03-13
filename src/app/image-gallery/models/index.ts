@@ -6,3 +6,5 @@ export type {
   PicsumImageRequestOptions,
   PicsumListQuery,
 } from './picsum.model';
+
+export type { ImageGalleryState } from './image-gallery-state.model';

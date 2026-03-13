@@ -54,7 +54,12 @@ export default defineConfig([
       'jsdoc/require-jsdoc': [
         'warn',
         {
-          contexts: ['FunctionDeclaration', 'MethodDefinition'],
+          contexts: [
+            'FunctionDeclaration',
+            'MethodDefinition',
+            'TSInterfaceDeclaration',
+            'TSTypeAliasDeclaration',
+          ],
           publicOnly: false,
           require: {
             FunctionDeclaration: true,
@@ -70,6 +75,35 @@ export default defineConfig([
         },
       ],
       'jsdoc/no-types': 'warn',
+    },
+  },
+  {
+    files: ['src/app/**/*.ts'],
+    ignores: ['src/app/**/*.spec.ts', 'src/app/**/*.render.spec.ts', 'src/app/**/models/**/*.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'warn',
+        {
+          selector: "CallExpression[callee.property.name='subscribe']",
+          message:
+            'Prefer reactive composition with signals/observables in components instead of imperative subscribe calls.',
+        },
+        {
+          selector: "CallExpression[callee.name='toSignal']",
+          message:
+            'For component HTTP-backed resources, prefer rxResource instead of toSignal/manual loading state wiring.',
+        },
+        {
+          selector: 'TSInterfaceDeclaration',
+          message:
+            'Declare custom interfaces in the feature local models folder and export them through the models barrel.',
+        },
+        {
+          selector: 'TSTypeAliasDeclaration',
+          message:
+            'Declare custom type aliases in the feature local models folder and export them through the models barrel.',
+        },
+      ],
     },
   },
 

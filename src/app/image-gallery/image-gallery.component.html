@@ -13,9 +13,13 @@
     <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
   </ion-item>
 } @else {
-  <ion-list [attr.aria-label]="'gallery.feedAriaLabel' | translate">
+  <ion-list
+    class="gallery-list"
+    [attr.aria-label]="'gallery.feedAriaLabel' | translate"
+  >
     @for (image of images(); track image.id) {
       <ion-img
+        class="gallery-image"
         [src]="getImageSource(image)"
         [alt]="'gallery.imageAlt' | translate: { author: image.author }"
       />

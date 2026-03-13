@@ -1,3 +1,4 @@
+/** Author profile details shown for a social media post. */
 export interface SocialPostAuthor {
   id: string;
   handle: string;
@@ -5,6 +6,7 @@ export interface SocialPostAuthor {
   avatarUrl: string;
 }
 
+/** Post entity displayed in the social media feed. */
 export interface SocialMediaPost {
   id: string;
   avatarUrl: string;

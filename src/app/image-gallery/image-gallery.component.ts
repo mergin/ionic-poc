@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { IonItem, IonLabel, IonList, IonImg } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { take } from 'rxjs';
+import { map } from 'rxjs';
 
 import type { PicsumImage } from '@app/image-gallery/models';
 import { PicsumService } from '@app/image-gallery/services';
@@ -13,21 +14,26 @@ import { PicsumService } from '@app/image-gallery/services';
   styleUrls: ['./image-gallery.component.scss'],
   imports: [IonItem, IonLabel, IonList, IonImg, TranslatePipe],
 })
-export class ImageGalleryComponent implements OnInit {
+export class ImageGalleryComponent {
   private readonly picsumService = inject(PicsumService);
   protected readonly useMockPicsumApi = false;
 
-  protected readonly images = signal<PicsumImage[]>([]);
-  protected readonly loading = signal(false);
-  protected readonly errorMessageKey = signal<string | null>(null);
+  private readonly imagesResource = rxResource({
+    defaultValue: [] as PicsumImage[],
+    stream: () => {
+      this.picsumService.setUseMockMsw(this.useMockPicsumApi);
 
-  /**
-   * Initializes gallery content by loading random ordered images.
-   */
-  ngOnInit(): void {
-    this.picsumService.setUseMockMsw(this.useMockPicsumApi);
-    this.loadImages();
-  }
+      return this.picsumService
+        .getImageList()
+        .pipe(map(images => this.getRandomizedImages(images)));
+    },
+  });
+
+  protected readonly images = computed(() => this.imagesResource.value());
+  protected readonly loading = computed(() => this.imagesResource.isLoading());
+  protected readonly errorMessageKey = computed(() =>
+    this.imagesResource.status() === 'error' ? 'gallery.loadError' : null,
+  );
 
   /**
    * Provides the image source URL for rendering.
@@ -36,28 +42,6 @@ export class ImageGalleryComponent implements OnInit {
    */
   protected getImageSource(image: PicsumImage): string {
     return image.download_url;
-  }
-
-  /**
-   * Loads images from Picsum and updates component state signals.
-   */
-  private loadImages(): void {
-    this.loading.set(true);
-    this.errorMessageKey.set(null);
-
-    this.picsumService
-      .getImageList()
-      .pipe(take(1))
-      .subscribe({
-        next: images => {
-          this.images.set(this.getRandomizedImages(images));
-          this.loading.set(false);
-        },
-        error: () => {
-          this.errorMessageKey.set('gallery.loadError');
-          this.loading.set(false);
-        },
-      });
   }
 
   /**

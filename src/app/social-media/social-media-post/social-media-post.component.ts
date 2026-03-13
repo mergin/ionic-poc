@@ -1,6 +1,6 @@
 import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { IonAvatar, IonItem, IonLabel, IonNote, IonText } from '@ionic/angular/standalone';
 import { TranslateService } from '@ngx-translate/core';
 import { map, startWith } from 'rxjs';
@@ -27,15 +27,17 @@ import { SocialMediaButtonsComponent } from '@app/social-media/social-media-butt
 export class SocialMediaPostComponent {
   private readonly translateService = inject(TranslateService);
 
-  private readonly activeLanguage = toSignal(
-    this.translateService.onLangChange.pipe(
-      map(event => event.lang),
-      startWith(
-        this.translateService.getCurrentLang() || this.translateService.getFallbackLang() || 'en',
+  private readonly activeLanguageResource = rxResource({
+    defaultValue:
+      this.translateService.getCurrentLang() || this.translateService.getFallbackLang() || 'en',
+    stream: () =>
+      this.translateService.onLangChange.pipe(
+        map(event => event.lang),
+        startWith(
+          this.translateService.getCurrentLang() || this.translateService.getFallbackLang() || 'en',
+        ),
       ),
-    ),
-    { initialValue: this.translateService.getCurrentLang() || 'en' },
-  );
+  });
 
   /**
    * Post content rendered by this feed item.
@@ -53,7 +55,7 @@ export class SocialMediaPostComponent {
   readonly likeRequested = output<string>();
 
   protected readonly activeLocale = computed(() =>
-    this.activeLanguage().startsWith('es') ? 'es-ES' : 'en-US',
+    this.activeLanguageResource.value().startsWith('es') ? 'es-ES' : 'en-US',
   );
 
   /**
