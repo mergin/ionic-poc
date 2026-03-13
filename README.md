@@ -125,6 +125,7 @@ npm run test:e2e
   - `@app/*` → `src/app/*`
   - `@mocks/*` → `mocks/*`
   - `@env/*` → `src/environments/*`
+- Use semantic HTML in templates (`header`, `main`, `section`, `nav`, `ul/li`, `button`) and add ARIA only when native semantics are insufficient.
 - API requests are mocked with MSW in development and tests.
 - The social media mock API handlers are in `mocks/handlers/posts.ts`.
 - Angular social media API models/services are in `src/app/social-media/models` and `src/app/social-media/services`.

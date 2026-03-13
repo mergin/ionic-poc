@@ -94,6 +94,29 @@ export default defineConfig([
             'For component HTTP-backed resources, prefer rxResource instead of toSignal/manual loading state wiring.',
         },
         {
+          selector: 'ForStatement',
+          message:
+            'Prefer functional transformations (map/filter/reduce/flatMap) over explicit for loops when possible.',
+        },
+        {
+          selector: 'ForInStatement',
+          message:
+            'Prefer Object.keys/Object.values/Object.entries with functional transformations over for...in loops when possible.',
+        },
+        {
+          selector: 'ForOfStatement',
+          message: 'Prefer functional transformations over explicit for...of loops when possible.',
+        },
+        {
+          selector: 'WhileStatement',
+          message: 'Prefer functional transformations over explicit while loops when possible.',
+        },
+        {
+          selector: 'DoWhileStatement',
+          message:
+            'Prefer functional transformations over explicit do...while loops when possible.',
+        },
+        {
           selector: 'TSInterfaceDeclaration',
           message:
             'Declare custom interfaces in the feature local models folder and export them through the models barrel.',

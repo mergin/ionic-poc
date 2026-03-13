@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -103,5 +104,34 @@ describe('ImageGalleryComponent', () => {
     // ASSERT
     const errorItem = fixture.nativeElement.querySelector('ion-item[role="alert"]');
     expect(errorItem).toBeTruthy();
+  }));
+
+  it('should refresh gallery data and complete refresher event', fakeAsync(() => {
+    // ARRANGE
+    const completeSpy = jasmine.createSpy('complete').and.returnValue(Promise.resolve());
+    const refreshEvent = {
+      target: { complete: completeSpy },
+    } as unknown as import('@ionic/core').RefresherCustomEvent;
+
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+
+    // ACT
+    (
+      component as unknown as {
+        handleRefresh: (event: import('@ionic/core').RefresherCustomEvent) => void;
+      }
+    ).handleRefresh(refreshEvent);
+
+    // Refresh should complete after the API call settles, not immediately.
+    expect(completeSpy).not.toHaveBeenCalled();
+
+    tick();
+    fixture.detectChanges();
+
+    // ASSERT
+    expect(completeSpy).toHaveBeenCalled();
+    expect(picsumServiceSpy.getImageList).toHaveBeenCalledTimes(2);
   }));
 });

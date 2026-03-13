@@ -40,6 +40,7 @@ workspace conventions.
 - Use strict typing and prefer explicit domain types.
 - Prefer type inference when obvious, but avoid ambiguous inferred types.
 - Avoid `any`; use `unknown` when the type is uncertain.
+- Prefer functional transformations (`map`, `filter`, `reduce`, `flatMap`) over explicit `for`/`while` loops.
 - Keep functions small and pure when possible.
 - Require explicit return types on all methods/functions, except constructors and Angular lifecycle hooks.
 
@@ -58,6 +59,8 @@ workspace conventions.
 ## Template Guidelines
 
 - Use Angular control flow (`@if`, `@for`, `@switch`) instead of structural directives.
+- Use correct semantic HTML structure (`header`, `main`, `section`, `nav`, `ul/li`, `button`) and only add ARIA when native semantics are insufficient.
+- Keep strict template validation enabled: avoid `CUSTOM_ELEMENTS_SCHEMA` in components and prefer explicit standalone imports for every template dependency.
 - Keep template expressions simple; move non-trivial logic to TypeScript.
 - Use `class` and `style` bindings instead of `ngClass` and `ngStyle`.
 - Use `ngSrc` (`NgOptimizedImage`) for static image resources when applicable.

@@ -80,14 +80,11 @@ function resolveAuthToken(): string | null {
  * @returns The cookie value when found, otherwise null.
  */
 function readCookieToken(cookieHeader: string, key: string): string | null {
-  const cookies = cookieHeader.split(';');
-
-  for (const cookieEntry of cookies) {
-    const trimmedCookieEntry = cookieEntry.trim();
-    if (trimmedCookieEntry.startsWith(`${key}=`)) {
-      return trimmedCookieEntry.slice(key.length + 1);
-    }
-  }
-
-  return null;
+  return (
+    cookieHeader
+      .split(';')
+      .map(cookieEntry => cookieEntry.trim())
+      .find(trimmedCookieEntry => trimmedCookieEntry.startsWith(`${key}=`))
+      ?.slice(key.length + 1) ?? null
+  );
 }

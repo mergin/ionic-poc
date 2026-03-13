@@ -1,48 +1,57 @@
-@if (loading()) {
-  <ion-item
-    role="status"
-    aria-live="polite"
+<ion-content [fullscreen]="true">
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="handleRefresh($event)"
   >
-    <ion-label>{{ 'gallery.loading' | translate }}</ion-label>
-  </ion-item>
-} @else if (errorMessageKey()) {
-  <ion-item
-    role="alert"
-    aria-live="assertive"
-  >
-    <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
-  </ion-item>
-} @else {
-  <ion-list
-    class="gallery-list"
-    role="list"
-    [attr.aria-label]="'gallery.feedAriaLabel' | translate"
-  >
-    @for (image of images(); track image.id) {
-      <div
-        class="gallery-card"
-        role="listitem"
-        [attr.aria-busy]="!isImageLoaded(image.id)"
-      >
-        @if (!isImageLoaded(image.id)) {
-          <ion-skeleton-text
-            class="gallery-skeleton"
-            aria-hidden="true"
+    <ion-refresher-content />
+  </ion-refresher>
+
+  @if (loading()) {
+    <ion-item
+      role="status"
+      aria-live="polite"
+    >
+      <ion-label>{{ 'gallery.loading' | translate }}</ion-label>
+    </ion-item>
+  } @else if (errorMessageKey()) {
+    <ion-item
+      role="alert"
+      aria-live="assertive"
+    >
+      <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
+    </ion-item>
+  } @else {
+    <ion-list
+      class="gallery-list"
+      role="list"
+      [attr.aria-label]="'gallery.feedAriaLabel' | translate"
+    >
+      @for (image of images(); track image.id) {
+        <div
+          class="gallery-card"
+          role="listitem"
+          [attr.aria-busy]="!isImageLoaded(image.id)"
+        >
+          @if (!isImageLoaded(image.id)) {
+            <ion-skeleton-text
+              class="gallery-skeleton"
+              aria-hidden="true"
+              [style.aspect-ratio]="getImageAspectRatio(image)"
+              animated
+            />
+          }
+          <ion-img
+            class="gallery-image"
+            [class.gallery-image--hidden]="!isImageLoaded(image.id)"
+            [attr.aria-hidden]="!isImageLoaded(image.id)"
             [style.aspect-ratio]="getImageAspectRatio(image)"
-            animated
+            [src]="getImageSource(image)"
+            [alt]="'gallery.imageAlt' | translate: { author: image.author }"
+            (ionImgDidLoad)="onImageSettled(image.id)"
+            (ionError)="onImageSettled(image.id)"
           />
-        }
-        <ion-img
-          class="gallery-image"
-          [class.gallery-image--hidden]="!isImageLoaded(image.id)"
-          [attr.aria-hidden]="!isImageLoaded(image.id)"
-          [style.aspect-ratio]="getImageAspectRatio(image)"
-          [src]="getImageSource(image)"
-          [alt]="'gallery.imageAlt' | translate: { author: image.author }"
-          (ionImgDidLoad)="onImageSettled(image.id)"
-          (ionError)="onImageSettled(image.id)"
-        />
-      </div>
-    }
-  </ion-list>
-}
+        </div>
+      }
+    </ion-list>
+  }
+</ion-content>
