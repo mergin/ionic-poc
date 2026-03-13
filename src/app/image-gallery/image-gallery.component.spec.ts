@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
@@ -57,13 +57,13 @@ describe('ImageGalleryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load and render images from picsum service', async () => {
+  it('should load and render images from picsum service', fakeAsync(() => {
     // ARRANGE
     const expectedImageCount = 2;
 
     // ACT
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     fixture.detectChanges();
 
     // ASSERT
@@ -71,9 +71,9 @@ describe('ImageGalleryComponent', () => {
     expect(picsumServiceSpy.getImageList).toHaveBeenCalled();
     const imageElements = fixture.nativeElement.querySelectorAll('ion-img');
     expect(imageElements.length).toBe(expectedImageCount);
-  });
+  }));
 
-  it('should show gallery load error when service fails', async () => {
+  it('should show gallery load error when service fails', fakeAsync(() => {
     // ARRANGE
     picsumServiceSpy.getImageList.and.returnValue(
       throwError(() => new Error('Failed to load images')),
@@ -81,15 +81,15 @@ describe('ImageGalleryComponent', () => {
 
     // ACT
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     fixture.detectChanges();
 
     // ASSERT
     expect(component['errorMessageKey']()).toBe('gallery.loadError');
     expect(component['loading']()).toBeFalse();
-  });
+  }));
 
-  it('should render gallery load error item when service fails', async () => {
+  it('should render gallery load error item when service fails', fakeAsync(() => {
     // ARRANGE
     picsumServiceSpy.getImageList.and.returnValue(
       throwError(() => new Error('Failed to load images')),
@@ -97,11 +97,11 @@ describe('ImageGalleryComponent', () => {
 
     // ACT
     fixture.detectChanges();
-    await fixture.whenStable();
+    tick();
     fixture.detectChanges();
 
     // ASSERT
     const errorItem = fixture.nativeElement.querySelector('ion-item[role="alert"]');
     expect(errorItem).toBeTruthy();
-  });
+  }));
 });

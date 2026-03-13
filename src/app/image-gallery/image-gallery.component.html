@@ -15,14 +15,34 @@
 } @else {
   <ion-list
     class="gallery-list"
+    role="list"
     [attr.aria-label]="'gallery.feedAriaLabel' | translate"
   >
     @for (image of images(); track image.id) {
-      <ion-img
-        class="gallery-image"
-        [src]="getImageSource(image)"
-        [alt]="'gallery.imageAlt' | translate: { author: image.author }"
-      />
+      <div
+        class="gallery-card"
+        role="listitem"
+        [attr.aria-busy]="!isImageLoaded(image.id)"
+      >
+        @if (!isImageLoaded(image.id)) {
+          <ion-skeleton-text
+            class="gallery-skeleton"
+            aria-hidden="true"
+            [style.aspect-ratio]="getImageAspectRatio(image)"
+            animated
+          />
+        }
+        <ion-img
+          class="gallery-image"
+          [class.gallery-image--hidden]="!isImageLoaded(image.id)"
+          [attr.aria-hidden]="!isImageLoaded(image.id)"
+          [style.aspect-ratio]="getImageAspectRatio(image)"
+          [src]="getImageSource(image)"
+          [alt]="'gallery.imageAlt' | translate: { author: image.author }"
+          (ionImgDidLoad)="onImageSettled(image.id)"
+          (ionError)="onImageSettled(image.id)"
+        />
+      </div>
     }
   </ion-list>
 }

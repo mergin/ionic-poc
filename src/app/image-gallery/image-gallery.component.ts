@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { IonItem, IonLabel, IonList, IonImg } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -13,10 +20,12 @@ import { PicsumService } from '@app/image-gallery/services';
   templateUrl: './image-gallery.component.html',
   styleUrls: ['./image-gallery.component.scss'],
   imports: [IonItem, IonLabel, IonList, IonImg, TranslatePipe],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ImageGalleryComponent {
   private readonly picsumService = inject(PicsumService);
   protected readonly useMockPicsumApi = false;
+  private readonly loadedImageIds = signal<Set<string>>(new Set());
 
   private readonly imagesResource = rxResource({
     defaultValue: [] as PicsumImage[],
@@ -42,6 +51,32 @@ export class ImageGalleryComponent {
    */
   protected getImageSource(image: PicsumImage): string {
     return image.download_url;
+  }
+
+  /**
+   * Builds an aspect-ratio value from image dimensions for masonry rendering.
+   * @param image Image metadata item to render.
+   * @returns CSS aspect-ratio value.
+   */
+  protected getImageAspectRatio(image: PicsumImage): string {
+    return `${image.width} / ${image.height}`;
+  }
+
+  /**
+   * Marks an image as settled after load or error to hide its skeleton placeholder.
+   * @param imageId Unique image identifier.
+   */
+  protected onImageSettled(imageId: string): void {
+    this.loadedImageIds.update(previous => new Set([...previous, imageId]));
+  }
+
+  /**
+   * Indicates whether an image has finished loading (or errored) and can hide its skeleton.
+   * @param imageId Unique image identifier.
+   * @returns True when the image is already settled.
+   */
+  protected isImageLoaded(imageId: string): boolean {
+    return this.loadedImageIds().has(imageId);
   }
 
   /**
