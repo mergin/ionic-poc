@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: Social Media API consumed by SocialMediaApiService
+  version: 1.0.0
+  description: OpenAPI contract for endpoints consumed in src/app/social-media/services/social-media-api/social-media-api.service.ts.
+servers:
+  - url: https://api-gateway.example.com/v1
+    description: Mocked gateway base URL used in development and tests
+paths:
+  /social/posts:
+    get:
+      tags: [SocialMedia]
+      summary: List social media posts
+      description: Returns all posts in feed order.
+      responses:
+        '200':
+          description: Social feed response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialMediaPost'
+  /social/posts/{id}:
+    get:
+      tags: [SocialMedia]
+      summary: Get one post by id
+      parameters:
+        - $ref: '#/components/parameters/PostIdPath'
+      responses:
+        '200':
+          description: Single post response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialMediaPost'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /social/posts/{id}/likes:
+    post:
+      tags: [SocialMedia]
+      summary: Like one post
+      description: Marks the post as liked by the current user and returns updated post state.
+      parameters:
+        - $ref: '#/components/parameters/PostIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: Updated post after like action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialMediaPost'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+components:
+  parameters:
+    PostIdPath:
+      name: id
+      in: path
+      required: true
+      description: Unique social media post identifier.
+      schema:
+        type: string
+  schemas:
+    SocialPostAuthor:
+      type: object
+      required:
+        - id
+        - handle
+        - displayName
+        - avatarUrl
+      properties:
+        id:
+          type: string
+        handle:
+          type: string
+        displayName:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+    SocialMediaPost:
+      type: object
+      required:
+        - id
+        - avatarUrl
+        - content
+        - author
+        - timestamp
+        - likes
+        - likedByMe
+        - replies
+        - reposts
+      properties:
+        id:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+        content:
+          type: string
+        author:
+          $ref: '#/components/schemas/SocialPostAuthor'
+        timestamp:
+          type: string
+          format: date-time
+        likes:
+          type: integer
+        likedByMe:
+          type: boolean
+        replies:
+          type: integer
+        reposts:
+          type: integer
+    ErrorMessage:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
