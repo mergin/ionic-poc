@@ -8,11 +8,13 @@ export const routes: Routes = [
     children: [
       {
         path: 'tab1',
-        loadComponent: () => import('../tab1/tab1.page').then(m => m.Tab1Page),
+        loadComponent: () =>
+          import('../social-media/social-media.component').then(m => m.SocialMediaComponent),
       },
       {
         path: 'tab2',
-        loadComponent: () => import('../tab2/tab2.page').then(m => m.Tab2Page),
+        loadComponent: () =>
+          import('../image-gallery/image-gallery.component').then(m => m.ImageGalleryComponent),
       },
       {
         path: 'tab3',

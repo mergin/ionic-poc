@@ -48,15 +48,94 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 ### Project layout
 
 ```text
-src/
-  app/
-    social-media/
-      models/
-      services/
-mocks/
-  handlers/
-scripts/
+.
+├─ src/
+│  ├─ app/
+│  │  ├─ core/
+│  │  │  ├─ auth-interceptor/
+│  │  │  └─ error-interceptor/
+│  │  ├─ header/
+│  │  ├─ image-gallery/
+│  │  ├─ social-media/
+│  │  │  ├─ models/
+│  │  │  ├─ services/
+│  │  │  ├─ social-media-buttons/
+│  │  │  └─ social-media-post/
+│  │  ├─ tabs/
+│  │  ├─ app.component.*
+│  │  └─ app.routes.ts
+│  ├─ assets/
+│  │  ├─ i18n/
+│  │  │  ├─ en.json
+│  │  │  └─ es.json
+│  │  └─ icon/
+│  ├─ environments/
+│  │  ├─ environment.ts
+│  │  └─ environment.prod.ts
+│  ├─ theme/
+│  │  └─ variables.scss
+│  ├─ global.scss
+│  ├─ main.ts
+│  └─ test.ts
+├─ mocks/
+│  ├─ handlers/
+│  ├─ browser.ts
+│  ├─ db.ts
+│  └─ server.ts
+├─ e2e/
+│  ├─ flows/
+│  ├─ i18n/
+│  ├─ smoke/
+│  └─ social/
+├─ scripts/
+├─ docs/
+└─ README.md
 ```
+
+### Structure notes
+
+- `src/app/` contains the Angular application, organized by domain/feature instead of by type-only layers.
+- `src/app/social-media/` is the main feature example and keeps its interfaces in `models/`, HTTP/domain services in `services/`, and feature UI split into focused standalone components.
+- `src/app/core/` contains cross-cutting infrastructure such as HTTP interceptors.
+- `mocks/` contains the MSW browser/server setup and domain handlers used in development and tests.
+- `e2e/` groups Playwright specs by behavior: smoke checks, navigation flows, i18n, and social-media journeys.
+- `src/assets/i18n/` contains the translation dictionaries loaded by `ngx-translate`.
+
+### Application flow
+
+```mermaid
+flowchart TD
+  A[App bootstrap in main.ts] --> B[MSW worker starts in development]
+  A --> C[Angular bootstraps AppComponent]
+  C --> D[ion-app and ion-router-outlet]
+  D --> E[App routes redirect to /tabs/tab1]
+  E --> F[TabsPage shell]
+  F --> G[Header with translated active tab title]
+  F --> H[Bottom tab bar navigation]
+
+  H --> I[tab1 route]
+  H --> J[tab2 route]
+  H --> K[tab3 route]
+
+  I --> L[SocialMediaComponent]
+  L --> M[rxResource loads posts]
+  L --> N[Pull to refresh reloads feed]
+  L --> O[Like action updates a post]
+  M --> P[SocialMediaApiService]
+  N --> P
+  O --> P
+  P --> Q[HTTP client with auth and error interceptors]
+  Q --> R[MSW social handlers or real API]
+
+  J --> S[ImageGalleryComponent]
+  S --> T[PicsumService]
+  T --> U[MSW picsum handlers or Lorem Picsum API]
+
+  K --> V[Tab3Page]
+  V --> W[ExploreContainerComponent]
+```
+
+This diagram reflects the current route structure and request flow: the app boots through `main.ts`, redirects into the tabs shell, and lazy-loads each tab feature. Data-facing tabs then delegate network work to typed services, which run through the shared HTTP pipeline and can be intercepted by MSW in development and tests.
 
 ---
 

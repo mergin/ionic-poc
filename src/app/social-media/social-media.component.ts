@@ -1,7 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '@ngx-translate/core';
-import { IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonRefresher,
+  IonRefresherContent,
+} from '@ionic/angular/standalone';
+import type { RefresherCustomEvent } from '@ionic/core';
+import { finalize } from 'rxjs';
 
 import type { SocialMediaPost } from '@app/social-media/models';
 import { SocialMediaPostComponent } from '@app/social-media/social-media-post';
@@ -12,15 +21,44 @@ import { SocialMediaApiService } from '@app/social-media/services';
   templateUrl: './social-media.component.html',
   styleUrls: ['./social-media.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IonItem, IonLabel, IonList, SocialMediaPostComponent, TranslatePipe],
+  imports: [
+    IonRefresherContent,
+    IonRefresher,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonList,
+    SocialMediaPostComponent,
+    TranslatePipe,
+  ],
 })
 export class SocialMediaComponent {
   private readonly socialMediaApiService = inject(SocialMediaApiService);
+  private readonly refreshNonce = signal(0);
+  private readonly refreshCompleteByNonce = signal(new Map<number, () => Promise<void>>());
   private readonly likeRequest = signal<{ postId: string; nonce: number } | undefined>(undefined);
 
   private readonly postsResource = rxResource({
     defaultValue: [] as SocialMediaPost[],
-    stream: () => this.socialMediaApiService.getPosts(),
+    params: () => this.refreshNonce(),
+    stream: ({ params }) => {
+      const requestNonce = params;
+
+      return this.socialMediaApiService.getPosts().pipe(
+        finalize(() => {
+          const completeRefresh = this.refreshCompleteByNonce().get(requestNonce);
+
+          if (completeRefresh !== undefined) {
+            void completeRefresh();
+            this.refreshCompleteByNonce.update(previousMap => {
+              const nextMap = new Map(previousMap);
+              nextMap.delete(requestNonce);
+              return nextMap;
+            });
+          }
+        }),
+      );
+    },
   });
 
   private readonly likedPostResource = rxResource({
@@ -41,6 +79,22 @@ export class SocialMediaComponent {
   protected readonly errorMessageKey = computed(() =>
     this.postsResource.status() === 'error' ? 'social.loadError' : null,
   );
+
+  /**
+   * Handles pull-to-refresh by requesting a new feed fetch and deferring completion.
+   * @param event Custom refresher event emitted by ion-refresher.
+   */
+  protected handleRefresh(event: RefresherCustomEvent): void {
+    const nextNonce = this.refreshNonce() + 1;
+
+    this.refreshCompleteByNonce.update(previousMap => {
+      const nextMap = new Map(previousMap);
+      nextMap.set(nextNonce, () => event.target.complete());
+      return nextMap;
+    });
+
+    this.refreshNonce.set(nextNonce);
+  }
 
   /**
    * Likes a post and updates it in local component state.

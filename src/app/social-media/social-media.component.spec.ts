@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
@@ -116,4 +116,33 @@ describe('SocialMediaComponent', () => {
     expect(component['posts']()[0].likes).toBe(expectedLikeCount);
     expect(component['posts']()[0].likedByMe).toBeTrue();
   });
+
+  it('should refresh posts and complete refresher event after the request settles', fakeAsync(() => {
+    // ARRANGE
+    const expectedGetPostsCallCount = 2;
+    const completeSpy = jasmine.createSpy('complete').and.returnValue(Promise.resolve());
+    const refreshEvent = {
+      target: { complete: completeSpy },
+    } as unknown as import('@ionic/core').RefresherCustomEvent;
+
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+
+    // ACT
+    (
+      component as unknown as {
+        handleRefresh: (event: import('@ionic/core').RefresherCustomEvent) => void;
+      }
+    ).handleRefresh(refreshEvent);
+
+    expect(completeSpy).not.toHaveBeenCalled();
+
+    tick();
+    fixture.detectChanges();
+
+    // ASSERT
+    expect(completeSpy).toHaveBeenCalled();
+    expect(socialMediaApiServiceSpy.getPosts).toHaveBeenCalledTimes(expectedGetPostsCallCount);
+  }));
 });

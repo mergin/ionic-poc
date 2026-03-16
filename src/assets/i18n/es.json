@@ -10,10 +10,10 @@
   },
   "tabs": {
     "tab1": "Red Social",
-    "tab2": "Pestaña 2",
+    "tab2": "Galería de Imágenes",
     "tab3": "Pestaña 3",
-    "tab2Page": "Página de la pestaña 2",
-    "tab3Page": "Página de la pestaña 3"
+    "tab2Page": "Página de la Galería de Imágenes",
+    "tab3Page": "Página de la Pestaña 3"
   },
   "explore": {
     "prefix": "Explora",
