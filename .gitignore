@@ -17,6 +17,7 @@ log.txt
 /.sourcemaps
 /.versions
 /coverage
+/.lighthouseci
 
 # Ionic
 /.ionic

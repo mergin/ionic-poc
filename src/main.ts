@@ -53,6 +53,11 @@ async function bootstrap(): Promise<void> {
       provideRouter(routes, withPreloading(PreloadAllModules)),
     ],
   });
+
+  if (environment.production) {
+    const { initWebVitalsReporting } = await import('@app/core/performance/web-vitals');
+    initWebVitalsReporting();
+  }
 }
 
 void bootstrap();

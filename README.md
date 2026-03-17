@@ -9,6 +9,7 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 > npm run test:render
 > npm run test:e2e:install
 > npm run test:e2e
+> npm run test:perf
 > ```
 >
 > Render tests validate component/page output quickly (`src/app/**/*.render.spec.ts`).
@@ -433,6 +434,9 @@ npm run test:e2e:install
 # Run E2E tests (Playwright)
 npm run test:e2e
 
+# Run performance checks (Lighthouse CI + Playwright perf smoke)
+npm run test:perf
+
 # Run tests with coverage and save full output to test-log.log
 npm run test:log
 
@@ -491,6 +495,23 @@ e2e/
 
 This keeps tests aligned with user journeys and avoids brittle, duplicated "one-file-per-component" E2E suites.
 
+### Performance testing
+
+- **Lighthouse CI:** `npm run test:perf:lighthouse`
+  - Uses `.lighthouserc.json`.
+  - Builds the app first (`pretest:perf:lighthouse`) and audits the production output (`www/`).
+  - Audits `/tabs/tab1`, `/tabs/tab2`, `/tabs/tab3`.
+  - Applies warning budgets for `performance` score, LCP, CLS, and TBT.
+- **Lighthouse CI (strict / CI gate):** `npm run test:perf:lighthouse:ci`
+  - Uses `.lighthouserc.ci.json`.
+  - Applies stricter error budgets for CI enforcement.
+- **Playwright performance smoke:** `npm run test:e2e:perf`
+  - Runs `e2e/performance/tabs-performance.spec.ts`.
+  - Checks initial load timing and tab transition timing budgets.
+- **Combined command:** `npm run test:perf`
+
+Production builds also report web-vitals (`CLS`, `INP`, `LCP`) via `src/app/core/performance/web-vitals.ts`.
+
 ### CI for render + E2E
 
 - Workflow: `.github/workflows/tests.yml`
@@ -498,6 +519,7 @@ This keeps tests aligned with user journeys and avoids brittle, duplicated "one-
   1. `npm ci`
   2. `npm run test:render`
   3. `npm run test:e2e`
+  4. `npm run test:perf:lighthouse:ci`
 - Uploads Playwright artifacts:
   - `playwright-report`
   - `test-results/playwright`
