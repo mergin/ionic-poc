@@ -1,2 +1,26 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+:root {
+  // Deep Sky palette - dark navy background with cyan accents
+  --ion-background-color: #0d1b2a;
+  --ion-text-color: #e8f0fe;
+  --ion-color-light: #0d1b2a;
+  --ion-color-dark: #e8f0fe;
+  --ion-color-medium: #8ab4ce;
+  --ion-color-medium-shade: #6a94ae;
+
+  // Toolbar backgrounds
+  --ion-toolbar-background: #112436;
+
+  // Primary accent (cyan)
+  --ion-color-primary: #38b6ff;
+  --ion-color-primary-shade: #1e96e0;
+
+  // Weather card background (frosted glass)
+  --weather-card-bg: rgba(255, 255, 255, 0.07);
+}
+
+ion-tab-bar {
+  --background: #112436;
+}

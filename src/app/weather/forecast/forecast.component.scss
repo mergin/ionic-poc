@@ -7,8 +7,9 @@
   min-height: 148px;
   padding: 12px 10px;
   border-radius: 14px;
-  background: color-mix(in srgb, var(--ion-color-light) 82%, white 18%);
-  border: 1px solid color-mix(in srgb, var(--ion-color-medium) 20%, transparent 80%);
+  background: var(--weather-card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
 }
 

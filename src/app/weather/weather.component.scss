@@ -15,6 +15,10 @@
 .weather-controls__search {
   flex: 1;
   min-width: 0;
+  --background: var(--weather-card-bg);
+  --border-radius: 14px;
+  --placeholder-color: var(--ion-color-medium);
+  --placeholder-opacity: 1;
 }
 
 .weather-controls__toggle-group {
@@ -40,13 +44,10 @@
 }
 
 .weather-controls__toggle {
-  // --track-background: rgba(var(--ion-text-color-rgb), 0.088);
-  // --track-background-checked: rgba(var(--ion-text-color-rgb), 0.088);
-
-  --background: color-mix(in srgb, var(--ion-color-medium) 28%, white 72%);
-  --background-checked: color-mix(in srgb, var(--ion-color-medium) 28%, white 72%);
-  --handle-background: var(--ion-color-light);
-  --handle-background-checked: var(--ion-color-light);
+  --background: rgba(255, 255, 255, 0.15);
+  --background-checked: rgba(255, 255, 255, 0.15);
+  --handle-background: #38b6ff;
+  --handle-background-checked: #38b6ff;
 }
 
 @media (max-width: 640px) {
