@@ -222,6 +222,31 @@ npm run test:e2e
 - API requests are mocked with MSW in development and tests.
 - The social media mock API handlers are in `mocks/handlers/posts.ts`.
 - Angular social media API models/services are in `src/app/social-media/models` and `src/app/social-media/services`.
+- All colors in component/page SCSS must use CSS variables declared in `src/theme/variables.scss` (avoid raw hex/rgb/hsl/rgba literals in feature styles).
+
+### Ionicons Registration Rule
+
+**Every icon used in a template must be:**
+
+1. Imported from `ionicons/icons` in the component TypeScript file
+2. Registered via `addIcons()` in the component constructor
+3. Referenced by name in the template: `<ion-icon name="chatbubbles" />`
+
+**Failure symptom:** Icon won't render even if the import exists, if `addIcons()` is not called.
+
+**Example:**
+
+```typescript
+import { addIcons } from 'ionicons';
+import { chatbubbles, images, cloud } from 'ionicons/icons';
+
+@Component({...})
+export class TabsPage {
+  constructor() {
+    addIcons({ chatbubbles, images, cloud });
+  }
+}
+```
 
 ---
 

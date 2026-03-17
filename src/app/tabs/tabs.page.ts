@@ -9,7 +9,7 @@ import {
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { triangle, ellipse, square } from 'ionicons/icons';
+import { chatbubbles, images, cloud } from 'ionicons/icons';
 
 import { HeaderComponent } from '@app/header/header.component';
 import type { AppTab } from '@app/tabs/models';
@@ -32,7 +32,7 @@ export class TabsPage {
    * Registers tab icons used by the bottom tab bar.
    */
   constructor() {
-    addIcons({ triangle, ellipse, square });
+    addIcons({ chatbubbles, images, cloud });
   }
 
   /**

@@ -115,7 +115,7 @@ workspace conventions.
 - Prefer existing Ionic/theming tokens from `src/theme/variables.scss`.
 - Put cross-app styles in `src/global.scss`; keep page styles scoped to each component.
 - Reuse Ionic utility classes and CSS variables before creating new custom rules.
-- Avoid hard-coded colors when a theme variable exists.
+- All colors must come from CSS custom properties declared in `src/theme/variables.scss` (no raw hex/rgb/hsl/rgba literals in component SCSS).
 
 ## Unit Testing (AAA Required)
 
@@ -193,3 +193,27 @@ workspace conventions.
 - For `input()`/`output()` comments, do not document TypeScript type details or whether the value is required; rely on TypeScript signatures for that metadata.
 - Do not include TypeScript types in JSDoc tags (`@param` / `@returns`); rely on TypeScript signatures for typing.
 - Keep documentation concise and behavior-oriented.
+
+## Ionicons Registration
+
+**Every icon used in a template must be:**
+
+1. Imported from `ionicons/icons` in the component TypeScript file
+2. Registered via `addIcons()` in the component constructor or setup function
+3. Referenced by name in templates, e.g. `<ion-icon name="chatbubbles" />`
+
+If an icon is used in a template but not registered, it will fail to render even if imported.
+
+**Example:**
+
+```typescript
+import { addIcons } from 'ionicons';
+import { chatbubbles, images, cloud } from 'ionicons/icons';
+
+@Component({...})
+export class MyComponent {
+  constructor() {
+    addIcons({ chatbubbles, images, cloud });
+  }
+}
+```

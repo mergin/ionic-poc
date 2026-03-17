@@ -19,8 +19,10 @@
 
   // Weather card background (frosted glass)
   --weather-card-bg: rgba(255, 255, 255, 0.07);
+  --weather-card-border: rgba(255, 255, 255, 0.1);
+  --weather-toggle-handle-bg: var(--ion-color-primary);
 }
 
 ion-tab-bar {
-  --background: #112436;
+  --background: var(--ion-toolbar-background);
 }

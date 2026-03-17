@@ -44,10 +44,12 @@
 }
 
 .weather-controls__toggle {
-  --background: rgba(255, 255, 255, 0.15);
-  --background-checked: rgba(255, 255, 255, 0.15);
-  --handle-background: #38b6ff;
-  --handle-background-checked: #38b6ff;
+  --background: var(--weather-card-bg) !important;
+  --background-checked: var(--weather-card-bg) !important;
+  --track-background: var(--weather-card-bg) !important;
+  --track-background-checked: var(--weather-card-bg) !important;
+  --handle-background: var(--weather-toggle-handle-bg);
+  --handle-background-checked: var(--weather-toggle-handle-bg);
 }
 
 @media (max-width: 640px) {
