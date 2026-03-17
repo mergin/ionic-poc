@@ -3,6 +3,11 @@ import { delay, http, HttpResponse } from 'msw';
 const OPEN_WEATHER_BASE = 'https://api.openweathermap.org/data/2.5';
 
 const WEATHER_DELAY_MS = 120;
+const SLOW_WEATHER_DELAY_MS = 900;
+const CELSIUS_TO_FAHRENHEIT_SCALE_NUMERATOR = 9;
+const CELSIUS_TO_FAHRENHEIT_SCALE_DENOMINATOR = 5;
+const CELSIUS_TO_FAHRENHEIT_OFFSET = 32;
+const MPS_TO_MPH_FACTOR = 2.236_936_29;
 
 const currentWeatherResponse = {
   weather: [{ id: 800, main: 'Clear', description: 'clear sky', icon: '01d' }],
@@ -216,14 +221,152 @@ const forecastResponse = {
   ],
 };
 
+/**
+ * Converts celsius to fahrenheit.
+ * @param celsius Temperature value in celsius.
+ * @returns Temperature value in fahrenheit.
+ */
+function toFahrenheit(celsius: number): number {
+  return (
+    celsius * (CELSIUS_TO_FAHRENHEIT_SCALE_NUMERATOR / CELSIUS_TO_FAHRENHEIT_SCALE_DENOMINATOR) +
+    CELSIUS_TO_FAHRENHEIT_OFFSET
+  );
+}
+
+/**
+ * Converts meters per second to miles per hour.
+ * @param metersPerSecond Wind speed in meters per second.
+ * @returns Wind speed in miles per hour.
+ */
+function toMph(metersPerSecond: number): number {
+  return metersPerSecond * MPS_TO_MPH_FACTOR;
+}
+
+/**
+ * Resolves query city with a stable default.
+ * @param cityQuery Raw city query parameter from request.
+ * @returns Normalized city string.
+ */
+function resolveCityName(cityQuery: string | null): string {
+  const normalizedCity = cityQuery?.trim();
+  return normalizedCity && normalizedCity.length > 0 ? normalizedCity : 'Madrid';
+}
+
+/**
+ * Creates current-weather payload using requested city and unit system.
+ * @param cityName City name requested by the client.
+ * @param units Unit system requested by the client.
+ * @returns Current weather payload.
+ */
+function buildCurrentWeatherResponse(
+  cityName: string,
+  units: string | null,
+): typeof currentWeatherResponse {
+  const isImperial = units === 'imperial';
+
+  return {
+    ...currentWeatherResponse,
+    name: cityName,
+    main: {
+      ...currentWeatherResponse.main,
+      temp: isImperial
+        ? toFahrenheit(currentWeatherResponse.main.temp)
+        : currentWeatherResponse.main.temp,
+      feels_like: isImperial
+        ? toFahrenheit(currentWeatherResponse.main.feels_like)
+        : currentWeatherResponse.main.feels_like,
+      temp_min: isImperial
+        ? toFahrenheit(currentWeatherResponse.main.temp_min)
+        : currentWeatherResponse.main.temp_min,
+      temp_max: isImperial
+        ? toFahrenheit(currentWeatherResponse.main.temp_max)
+        : currentWeatherResponse.main.temp_max,
+    },
+    wind: {
+      ...currentWeatherResponse.wind,
+      speed: isImperial
+        ? toMph(currentWeatherResponse.wind.speed)
+        : currentWeatherResponse.wind.speed,
+    },
+  };
+}
+
+/**
+ * Creates forecast payload using requested city and unit system.
+ * @param cityName City name requested by the client.
+ * @param units Unit system requested by the client.
+ * @returns Forecast payload.
+ */
+function buildForecastResponse(cityName: string, units: string | null): typeof forecastResponse {
+  const isImperial = units === 'imperial';
+
+  return {
+    ...forecastResponse,
+    city: {
+      ...forecastResponse.city,
+      name: cityName,
+    },
+    list: forecastResponse.list.map(item => ({
+      ...item,
+      main: {
+        ...item.main,
+        temp: isImperial ? toFahrenheit(item.main.temp) : item.main.temp,
+        feels_like: isImperial ? toFahrenheit(item.main.feels_like) : item.main.feels_like,
+        temp_min: isImperial ? toFahrenheit(item.main.temp_min) : item.main.temp_min,
+        temp_max: isImperial ? toFahrenheit(item.main.temp_max) : item.main.temp_max,
+      },
+      wind: {
+        ...item.wind,
+        speed: isImperial ? toMph(item.wind.speed) : item.wind.speed,
+      },
+    })),
+  };
+}
+
+/**
+ * Returns true when request should return simulated API error.
+ * @param cityName Requested city name.
+ * @returns Whether response should fail.
+ */
+function shouldReturnError(cityName: string): boolean {
+  return cityName.toLowerCase() === 'error-city';
+}
+
+/**
+ * Resolves a deterministic response delay for a given city.
+ * @param cityName Requested city name.
+ * @returns Delay value in milliseconds.
+ */
+function resolveDelay(cityName: string): number {
+  return cityName.toLowerCase() === 'slowville' ? SLOW_WEATHER_DELAY_MS : WEATHER_DELAY_MS;
+}
+
 export const weatherHandlers = [
-  http.get(`${OPEN_WEATHER_BASE}/weather`, async () => {
-    await delay(WEATHER_DELAY_MS);
-    return HttpResponse.json(currentWeatherResponse);
+  http.get(`${OPEN_WEATHER_BASE}/weather`, async ({ request }) => {
+    const url = new URL(request.url);
+    const cityName = resolveCityName(url.searchParams.get('q'));
+    const units = url.searchParams.get('units');
+
+    await delay(resolveDelay(cityName));
+
+    if (shouldReturnError(cityName)) {
+      return HttpResponse.json({ message: 'City not found' }, { status: 404 });
+    }
+
+    return HttpResponse.json(buildCurrentWeatherResponse(cityName, units));
   }),
 
-  http.get(`${OPEN_WEATHER_BASE}/forecast`, async () => {
-    await delay(WEATHER_DELAY_MS);
-    return HttpResponse.json(forecastResponse);
+  http.get(`${OPEN_WEATHER_BASE}/forecast`, async ({ request }) => {
+    const url = new URL(request.url);
+    const cityName = resolveCityName(url.searchParams.get('q'));
+    const units = url.searchParams.get('units');
+
+    await delay(resolveDelay(cityName));
+
+    if (shouldReturnError(cityName)) {
+      return HttpResponse.json({ message: 'City not found' }, { status: 404 });
+    }
+
+    return HttpResponse.json(buildForecastResponse(cityName, units));
   }),
 ];
