@@ -62,6 +62,9 @@ An Ionic / Angular **proof-of-concept** built with Angular 20.
 │  │  │  ├─ services/
 │  │  │  ├─ social-media-buttons/
 │  │  │  └─ social-media-post/
+│  │  ├─ weather/
+│  │  │  ├─ models/
+│  │  │  └─ services/
 │  │  ├─ tabs/
 │  │  ├─ app.component.*
 │  │  └─ app.routes.ts
@@ -145,6 +148,7 @@ This diagram reflects the current route structure and request flow: the app boot
 OpenAPI (Swagger) specifications for backend contracts consumed by the app:
 
 - [docs/picsum-api.swagger.yaml](docs/picsum-api.swagger.yaml): Complete Picsum API surface consumed by `PicsumService`.
+- [docs/open-weather-api.swagger.yaml](docs/open-weather-api.swagger.yaml): OpenWeather API endpoints consumed by `OpenWeatherApiService`.
 - [docs/social-media-api.swagger.yaml](docs/social-media-api.swagger.yaml): Social media API endpoints consumed by `SocialMediaApiService`.
 
 ---

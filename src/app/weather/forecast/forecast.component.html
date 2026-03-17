@@ -1,0 +1,16 @@
+<article class="forecast-card">
+  <p class="forecast-time">{{ entry().timeLabel }}</p>
+  <img
+    class="forecast-icon"
+    [ngSrc]="entry().iconUrl"
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    width="48"
+    height="48"
+  />
+  <p class="forecast-weather">{{ entry().weatherLabel }}</p>
+  <p class="forecast-temp">
+    {{ entry().temperature | number: '1.0-0' }}&deg;{{ unit() === 'fahrenheit' ? 'F' : 'C' }}
+  </p>
+</article>

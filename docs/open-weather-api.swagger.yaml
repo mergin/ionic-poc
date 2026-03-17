@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: OpenWeather API consumed by OpenWeatherApiService
+  version: 1.0.0
+  description: OpenAPI contract for endpoints consumed in src/app/weather/services/open-weather-api/open-weather-api.service.ts.
+servers:
+  - url: https://api.openweathermap.org/data/2.5
+    description: OpenWeather API base URL
+paths:
+  /weather:
+    get:
+      tags: [OpenWeather]
+      summary: Get current weather by city
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+        - $ref: '#/components/parameters/UnitsQuery'
+        - $ref: '#/components/parameters/AppIdQuery'
+      responses:
+        '200':
+          description: Current weather response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenWeatherCurrentWeatherResponse'
+  /forecast:
+    get:
+      tags: [OpenWeather]
+      summary: Get 5-day weather forecast by city
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+        - $ref: '#/components/parameters/UnitsQuery'
+        - $ref: '#/components/parameters/AppIdQuery'
+      responses:
+        '200':
+          description: Forecast response with 3-hour steps
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenWeatherForecastResponse'
+components:
+  parameters:
+    CityQuery:
+      name: q
+      in: query
+      required: true
+      description: City name used for weather lookup.
+      schema:
+        type: string
+    UnitsQuery:
+      name: units
+      in: query
+      required: true
+      description: Unit system requested by the client.
+      schema:
+        type: string
+        enum: [metric]
+    AppIdQuery:
+      name: appid
+      in: query
+      required: true
+      description: OpenWeather API key.
+      schema:
+        type: string
+  schemas:
+    OpenWeatherCondition:
+      type: object
+      required: [id, main, description, icon]
+      properties:
+        id:
+          type: integer
+        main:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+    OpenWeatherMain:
+      type: object
+      required: [temp, feels_like, temp_min, temp_max, pressure, humidity]
+      properties:
+        temp:
+          type: number
+          format: float
+        feels_like:
+          type: number
+          format: float
+        temp_min:
+          type: number
+          format: float
+        temp_max:
+          type: number
+          format: float
+        pressure:
+          type: integer
+        humidity:
+          type: integer
+    OpenWeatherWind:
+      type: object
+      required: [speed]
+      properties:
+        speed:
+          type: number
+          format: float
+        deg:
+          type: integer
+    OpenWeatherCity:
+      type: object
+      required: [id, name, country, timezone]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        country:
+          type: string
+        timezone:
+          type: integer
+    OpenWeatherCurrentWeatherResponse:
+      type: object
+      required: [weather, main, wind, dt, name, timezone]
+      properties:
+        weather:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenWeatherCondition'
+        main:
+          $ref: '#/components/schemas/OpenWeatherMain'
+        wind:
+          $ref: '#/components/schemas/OpenWeatherWind'
+        dt:
+          type: integer
+        name:
+          type: string
+        timezone:
+          type: integer
+    OpenWeatherForecastItem:
+      type: object
+      required: [dt, main, weather, wind, dt_txt]
+      properties:
+        dt:
+          type: integer
+        main:
+          $ref: '#/components/schemas/OpenWeatherMain'
+        weather:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenWeatherCondition'
+        wind:
+          $ref: '#/components/schemas/OpenWeatherWind'
+        dt_txt:
+          type: string
+    OpenWeatherForecastResponse:
+      type: object
+      required: [list, city]
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenWeatherForecastItem'
+        city:
+          $ref: '#/components/schemas/OpenWeatherCity'

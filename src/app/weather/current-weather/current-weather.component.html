@@ -1,0 +1,33 @@
+<section class="current-weather">
+  <h2 class="current-weather__temp">
+    {{ weather().temperature | number: '1.0-0' }}&deg;{{ unit() === 'fahrenheit' ? 'F' : 'C' }}
+  </h2>
+  <p class="current-weather__city">{{ weather().cityName }}</p>
+  <p class="current-weather__time">{{ weather().localTimeLabel }}</p>
+
+  <div class="current-weather__condition">
+    <img
+      [ngSrc]="weather().iconUrl"
+      alt=""
+      aria-hidden="true"
+      width="56"
+      height="56"
+    />
+    <span>{{ weather().weatherLabel }}</span>
+  </div>
+
+  <p class="current-weather__meta">
+    <span aria-hidden="true">🌬</span>
+    {{ 'weather.wind' | translate }}: {{ weather().windSpeed | number: '1.0-1' }}
+    {{ unit() === 'fahrenheit' ? 'mph' : 'm/s' }}
+  </p>
+  <p class="current-weather__meta">
+    {{ 'weather.feelsLike' | translate }}: {{ weather().feelsLike | number: '1.0-0' }}&deg;
+    {{ unit() === 'fahrenheit' ? 'F' : 'C' }}
+  </p>
+  <p class="current-weather__meta">
+    {{ 'weather.highLow' | translate }}: {{ weather().highTemp | number: '1.0-0' }}&deg;
+    {{ unit() === 'fahrenheit' ? 'F' : 'C' }} / {{ weather().lowTemp | number: '1.0-0' }}&deg;
+    {{ unit() === 'fahrenheit' ? 'F' : 'C' }}
+  </p>
+</section>

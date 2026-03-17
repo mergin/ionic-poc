@@ -1,0 +1,16 @@
+<section class="weather-section">
+  <h3 id="daily-forecast-title">{{ 'weather.dailyTitle' | translate }}</h3>
+  <ul
+    class="forecast-row"
+    aria-labelledby="daily-forecast-title"
+  >
+    @for (entry of entries(); track $index) {
+      <li class="forecast-row__item">
+        <app-forecast
+          [entry]="entry"
+          [unit]="unit()"
+        />
+      </li>
+    }
+  </ul>
+</section>

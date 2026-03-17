@@ -18,8 +18,8 @@ test('should navigate between tabs and render each page title', async ({ page })
 
   // ASSERT
   await expect(page).toHaveURL(/\/tabs\/tab3/);
-  await expect(pageTitle).toContainText('Tab 3');
-  await expect(page.getByText('Tab 3 page', { exact: true })).toBeVisible();
+  await expect(pageTitle).toContainText('Weather');
+  await expect(page.getByText('High/Low')).toBeVisible();
 
   // ACT
   await page.locator('ion-tab-button[tab="tab1"]').click();

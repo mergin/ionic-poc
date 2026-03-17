@@ -18,6 +18,10 @@ export const environment = {
   },
   apiUrls: {
     picsumBaseUrl: '/picsum',
+    openWeatherBaseUrl: 'https://api.openweathermap.org/data/2.5',
+  },
+  apiKeys: {
+    openWeatherApiKey: 'demo-open-weather-key',
   },
 };
 

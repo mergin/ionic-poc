@@ -1,0 +1,39 @@
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 92px;
+  min-height: 148px;
+  padding: 12px 10px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ion-color-light) 82%, white 18%);
+  border: 1px solid color-mix(in srgb, var(--ion-color-medium) 20%, transparent 80%);
+  text-align: center;
+}
+
+.forecast-time,
+.forecast-weather,
+.forecast-temp {
+  margin: 0;
+}
+
+.forecast-time {
+  font-size: 0.75rem;
+  color: var(--ion-color-medium-shade);
+}
+
+.forecast-icon {
+  display: block;
+}
+
+.forecast-weather {
+  font-size: 0.8rem;
+  color: var(--ion-color-dark);
+}
+
+.forecast-temp {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ion-color-primary-shade);
+}

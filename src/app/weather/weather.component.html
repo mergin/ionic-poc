@@ -1,0 +1,78 @@
+<ion-content [fullscreen]="true">
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <ion-refresher-content />
+  </ion-refresher>
+
+  <main class="weather-page ion-padding">
+    <section class="weather-controls">
+      <ion-searchbar
+        class="weather-controls__search"
+        [value]="cityName()"
+        [debounce]="300"
+        [placeholder]="'weather.searchPlaceholder' | translate"
+        [attr.aria-label]="'weather.searchAriaLabel' | translate"
+        (ionChange)="handleCitySearchChange($event)"
+      />
+
+      <div
+        class="weather-controls__toggle-group"
+        role="group"
+        [attr.aria-label]="'weather.unitToggleAriaLabel' | translate"
+      >
+        <ion-label
+          class="weather-controls__unit"
+          [class.weather-controls__unit--selected]="!isFahrenheitSelected()"
+          [class.weather-controls__unit--unselected]="isFahrenheitSelected()"
+        >
+          {{ 'weather.unitCelsius' | translate }}
+        </ion-label>
+        <ion-toggle
+          class="weather-controls__toggle"
+          color="light"
+          [checked]="isFahrenheitSelected()"
+          [attr.aria-label]="'weather.unitToggleAriaLabel' | translate"
+          (ionChange)="handleTemperatureUnitChange($event)"
+        />
+        <ion-label
+          class="weather-controls__unit"
+          [class.weather-controls__unit--selected]="isFahrenheitSelected()"
+          [class.weather-controls__unit--unselected]="!isFahrenheitSelected()"
+        >
+          {{ 'weather.unitFahrenheit' | translate }}
+        </ion-label>
+      </div>
+    </section>
+
+    @if (loading()) {
+      <ion-item
+        role="status"
+        aria-live="polite"
+      >
+        <ion-label>{{ 'weather.loading' | translate }}</ion-label>
+      </ion-item>
+    } @else if (errorMessageKey()) {
+      <ion-item
+        role="alert"
+        aria-live="assertive"
+      >
+        <ion-label>{{ errorMessageKey()! | translate }}</ion-label>
+      </ion-item>
+    } @else if (currentWeather()) {
+      <app-current-weather
+        [weather]="currentWeather()!"
+        [unit]="temperatureUnit()"
+      />
+      <app-hourly-forecast
+        [entries]="hourlyForecast()"
+        [unit]="temperatureUnit()"
+      />
+      <app-daily-forecast
+        [entries]="dailyForecast()"
+        [unit]="temperatureUnit()"
+      />
+    }
+  </main>
+</ion-content>

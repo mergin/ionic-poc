@@ -11,9 +11,9 @@
   "tabs": {
     "tab1": "Red Social",
     "tab2": "Galería de Imágenes",
-    "tab3": "Pestaña 3",
+    "tab3": "Clima",
     "tab2Page": "Página de la Galería de Imágenes",
-    "tab3Page": "Página de la Pestaña 3"
+    "tab3Page": "Página del Clima"
   },
   "explore": {
     "prefix": "Explora",
@@ -35,6 +35,20 @@
     "loadError": "No se pudieron cargar las imagenes.",
     "feedAriaLabel": "Galeria de imagenes",
     "imageAlt": "Foto de {{author}}"
+  },
+  "weather": {
+    "loading": "Cargando clima...",
+    "loadError": "No se pudieron cargar los datos del clima.",
+    "searchPlaceholder": "Buscar ciudad",
+    "searchAriaLabel": "Buscar clima por ciudad",
+    "unitToggleAriaLabel": "Cambiar entre Celsius y Fahrenheit",
+    "unitCelsius": "C",
+    "unitFahrenheit": "F",
+    "wind": "Viento",
+    "feelsLike": "Sensación térmica",
+    "highLow": "Máx/Mín",
+    "hourlyTitle": "Pronóstico por Hora",
+    "dailyTitle": "Pronóstico Diario"
   },
   "tab2Feature": {
     "ariaLabel": "Funcionalidad CSS moderna de la pestaña 2",

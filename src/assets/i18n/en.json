@@ -11,9 +11,9 @@
   "tabs": {
     "tab1": "Social Media",
     "tab2": "Image Gallery",
-    "tab3": "Tab 3",
+    "tab3": "Weather",
     "tab2Page": "Image Gallery page",
-    "tab3Page": "Tab 3 page"
+    "tab3Page": "Weather page"
   },
   "explore": {
     "prefix": "Explore",
@@ -35,6 +35,20 @@
     "loadError": "Unable to load images.",
     "feedAriaLabel": "Image gallery",
     "imageAlt": "Photo by {{author}}"
+  },
+  "weather": {
+    "loading": "Loading weather...",
+    "loadError": "Unable to load weather data.",
+    "searchPlaceholder": "Search city",
+    "searchAriaLabel": "Search city weather",
+    "unitToggleAriaLabel": "Switch between Celsius and Fahrenheit",
+    "unitCelsius": "C",
+    "unitFahrenheit": "F",
+    "wind": "Wind",
+    "feelsLike": "Feels like",
+    "highLow": "High/Low",
+    "hourlyTitle": "Hourly Forecast",
+    "dailyTitle": "Daily Forecast"
   },
   "tab2Feature": {
     "ariaLabel": "Tab 2 modern CSS feature",

@@ -18,7 +18,7 @@ export const routes: Routes = [
       },
       {
         path: 'tab3',
-        loadComponent: () => import('../tab3/tab3.page').then(m => m.Tab3Page),
+        loadComponent: () => import('../weather/weather.component').then(m => m.WeatherComponent),
       },
       {
         path: '',
