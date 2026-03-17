@@ -23,6 +23,7 @@
   "social": {
     "loading": "Cargando publicaciones...",
     "loadError": "No se pudieron cargar las publicaciones.",
+    "actionsAriaLabel": "Acciones de la publicación",
     "like": "Me gusta",
     "repostAriaLabel": "Repostear",
     "favoriteAriaLabel": "Favorito",

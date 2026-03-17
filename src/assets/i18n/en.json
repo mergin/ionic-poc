@@ -23,6 +23,7 @@
   "social": {
     "loading": "Loading posts...",
     "loadError": "Unable to load posts.",
+    "actionsAriaLabel": "Post actions",
     "like": "Like",
     "repostAriaLabel": "Repost",
     "favoriteAriaLabel": "Favorite",

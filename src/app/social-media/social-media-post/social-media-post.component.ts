@@ -13,6 +13,9 @@ import { SocialMediaButtonsComponent } from '@app/social-media/social-media-butt
   templateUrl: './social-media-post.component.html',
   styleUrls: ['./social-media-post.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    role: 'listitem',
+  },
   imports: [
     DatePipe,
     IonAvatar,
