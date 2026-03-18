@@ -35,6 +35,12 @@ workspace conventions.
 - Use stable, domain-based key names (e.g., `social.loading`, `tabs.tab1`, `common.language`).
 - In unit tests for components that use translation pipes/directives, provide `provideTranslateService()` in TestBed.
 
+## Deprecated Code and API Usage
+
+- Do not use deprecated APIs, functions, classes, or patterns. Always prefer the latest recommended Angular, Ionic, and TypeScript APIs.
+- Do not use any code, import, or pattern marked with `@deprecated` in JSDoc or official documentation.
+- When updating or refactoring, always replace deprecated usage with the current recommended alternative.
+
 ## TypeScript Best Practices
 
 - Use strict typing and prefer explicit domain types.

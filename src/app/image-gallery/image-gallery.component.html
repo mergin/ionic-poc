@@ -36,17 +36,17 @@
             <ion-skeleton-text
               class="gallery-skeleton"
               aria-hidden="true"
-              [style.aspect-ratio]="getImageAspectRatio(image)"
               animated
             />
           }
+          @let imageAlt = 'gallery.imageAlt' | translate: { author: image.author };
           <ion-img
             class="gallery-image"
             [class.gallery-image--hidden]="!isImageLoaded(image.id)"
-            [attr.aria-hidden]="!isImageLoaded(image.id)"
-            [style.aspect-ratio]="getImageAspectRatio(image)"
+            role="img"
+            [attr.aria-label]="imageAlt"
             [src]="getImageSource(image)"
-            [alt]="'gallery.imageAlt' | translate: { author: image.author }"
+            [alt]="imageAlt"
             (ionImgDidLoad)="onImageSettled(image.id)"
             (ionError)="onImageSettled(image.id)"
           />

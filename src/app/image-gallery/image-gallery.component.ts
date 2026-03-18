@@ -92,15 +92,6 @@ export class ImageGalleryComponent {
   }
 
   /**
-   * Builds an aspect-ratio value from image dimensions for masonry rendering.
-   * @param image Image metadata item to render.
-   * @returns CSS aspect-ratio value.
-   */
-  protected getImageAspectRatio(image: PicsumImage): string {
-    return `${image.width} / ${image.height}`;
-  }
-
-  /**
    * Marks an image as settled after load or error to hide its skeleton placeholder.
    * @param imageId Unique image identifier.
    */

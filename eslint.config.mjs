@@ -3,8 +3,10 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import json from '@eslint/json';
 import css from '@eslint/css';
+import angularPlugin from '@angular-eslint/eslint-plugin';
 import angularTemplatePlugin from '@angular-eslint/eslint-plugin-template';
 import angularTemplateParser from '@angular-eslint/template-parser';
+import importPlugin from 'eslint-plugin-import';
 import jsdocPlugin from 'eslint-plugin-jsdoc';
 import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
@@ -80,7 +82,15 @@ export default defineConfig([
   {
     files: ['src/app/**/*.ts'],
     ignores: ['src/app/**/*.spec.ts', 'src/app/**/*.render.spec.ts', 'src/app/**/models/**/*.ts'],
+    plugins: {
+      '@angular-eslint': angularPlugin,
+      import: importPlugin,
+    },
     rules: {
+      '@angular-eslint/prefer-inject': 'warn',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'warn',
+      '@angular-eslint/prefer-host-metadata-property': 'error',
+      'import/no-relative-parent-imports': 'error',
       'no-restricted-syntax': [
         'warn',
         {
@@ -163,8 +173,12 @@ export default defineConfig([
       ...angularTemplatePlugin.configs.recommended.rules,
       ...angularTemplatePlugin.configs.accessibility.rules,
       '@angular-eslint/template/prefer-self-closing-tags': 'error',
-      '@angular-eslint/template/prefer-ngsrc': 'warn',
+      '@angular-eslint/template/prefer-ngsrc': 'error',
       '@angular-eslint/template/prefer-control-flow': 'error',
+      '@angular-eslint/template/button-has-type': 'error',
+      '@angular-eslint/template/no-duplicate-attributes': 'error',
+      '@angular-eslint/template/no-inline-styles': 'error',
+      '@angular-eslint/template/no-autofocus': 'error',
       '@angular-eslint/template/cyclomatic-complexity': [
         'error',
         {

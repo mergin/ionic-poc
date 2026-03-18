@@ -4,6 +4,7 @@
       <ion-button
         id="language-select-button"
         [attr.aria-label]="'common.languageSelector' | translate"
+        (click)="openLanguagePopover($event)"
       >
         <ion-icon
           slot="icon-only"
@@ -14,8 +15,9 @@
       <!-- language popover -->
       <ion-popover
         #popover
-        trigger="language-select-button"
-        triggerAction="click"
+        [isOpen]="isLanguagePopoverOpen()"
+        [event]="languagePopoverEvent()"
+        (didDismiss)="onLanguagePopoverDidDismiss()"
       >
         <ng-template>
           <ion-content class="ion-padding">

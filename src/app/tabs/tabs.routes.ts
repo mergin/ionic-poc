@@ -9,16 +9,16 @@ export const routes: Routes = [
       {
         path: 'tab1',
         loadComponent: () =>
-          import('../social-media/social-media.component').then(m => m.SocialMediaComponent),
+          import('@app/social-media/social-media.component').then(m => m.SocialMediaComponent),
       },
       {
         path: 'tab2',
         loadComponent: () =>
-          import('../image-gallery/image-gallery.component').then(m => m.ImageGalleryComponent),
+          import('@app/image-gallery/image-gallery.component').then(m => m.ImageGalleryComponent),
       },
       {
         path: 'tab3',
-        loadComponent: () => import('../weather/weather.component').then(m => m.WeatherComponent),
+        loadComponent: () => import('@app/weather/weather.component').then(m => m.WeatherComponent),
       },
       {
         path: '',

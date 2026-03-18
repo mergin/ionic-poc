@@ -10,7 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --no-watch",
     "test:render": "ng test --no-watch --include src/app/**/*.render.spec.ts",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test e2e/smoke e2e/flows e2e/i18n e2e/gallery e2e/social e2e/weather",
     "test:e2e:weather": "playwright test e2e/weather",
     "test:e2e:perf": "playwright test e2e/performance",
     "test:e2e:install": "playwright install chromium",

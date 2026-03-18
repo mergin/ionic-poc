@@ -56,6 +56,8 @@ export class HeaderComponent implements OnInit {
   private readonly translateService = inject(TranslateService);
 
   protected readonly activeLang = signal<SupportedLang>('en');
+  protected readonly isLanguagePopoverOpen = signal(false);
+  protected readonly languagePopoverEvent = signal<Event | undefined>(undefined);
 
   private _popover = viewChild<IonPopover>('popover');
 
@@ -93,6 +95,23 @@ export class HeaderComponent implements OnInit {
     if (dismissPopover) {
       void this._popover()?.dismiss();
     }
+  }
+
+  /**
+   * Opens the language selection popover anchored to the button click event.
+   * @param event UI click event from the language selector button.
+   */
+  protected openLanguagePopover(event: Event): void {
+    this.languagePopoverEvent.set(event);
+    this.isLanguagePopoverOpen.set(true);
+  }
+
+  /**
+   * Resets popover state after the overlay is dismissed.
+   */
+  protected onLanguagePopoverDidDismiss(): void {
+    this.isLanguagePopoverOpen.set(false);
+    this.languagePopoverEvent.set(undefined);
   }
 
   /**

@@ -1,14 +1,106 @@
-name: Tests
+name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
       - main
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+
 jobs:
-  render-and-e2e:
+  commitlint:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint PR commits
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: commitlint.config.js
+          failOnWarnings: true
+          helpURL: https://www.conventionalcommits.org/en/v1.0.0/
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+  unit-and-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: xvfb-run -a npm run test
+
+      - name: Run render tests
+        run: xvfb-run -a npm run test:render
+
+      - name: Upload unit/render coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-unit-render
+          path: coverage
+          if-no-files-found: ignore
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs:
+      - quality
+      - unit-and-render
 
     steps:
       - name: Checkout
@@ -24,22 +116,16 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Chromium
-        run: npm run test:e2e:install
-
-      - name: Run render tests
-        run: npm run test:render
+        run: npx playwright install --with-deps chromium
 
       - name: Run E2E tests
         run: npm run test:e2e
-
-      - name: Run Lighthouse CI performance gate
-        run: npm run test:perf:lighthouse:ci
 
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-functional
           path: playwright-report
           if-no-files-found: ignore
 
@@ -47,6 +133,58 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results
+          name: playwright-results-functional
+          path: test-results/playwright
+          if-no-files-found: ignore
+
+  performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs:
+      - quality
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Lighthouse CI performance gate
+        run: npm run test:perf:lighthouse:ci
+
+      - name: Run Playwright performance smoke
+        run: npm run test:e2e:perf
+
+      - name: Upload Lighthouse artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+          if-no-files-found: ignore
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-performance
+          path: playwright-report
+          if-no-files-found: ignore
+
+      - name: Upload Playwright results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results-performance
           path: test-results/playwright
           if-no-files-found: ignore

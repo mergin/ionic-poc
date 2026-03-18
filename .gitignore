@@ -18,6 +18,8 @@ log.txt
 /.versions
 /coverage
 /.lighthouseci
+/playwright-report
+/test-results
 
 # Ionic
 /.ionic
