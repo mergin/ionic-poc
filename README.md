@@ -361,30 +361,39 @@ Commit messages are enforced by [commitlint](https://commitlint.js.org/) using t
 
 ### Types
 
-| Type       | When to use                                     |
-| ---------- | ----------------------------------------------- |
-| `feat`     | A new feature                                   |
-| `fix`      | A bug fix                                       |
-| `docs`     | Documentation changes only                      |
-| `style`    | Formatting, whitespace — no logic change        |
-| `refactor` | Code change that is neither a fix nor a feature |
-| `perf`     | Performance improvement                         |
-| `test`     | Adding or updating tests                        |
-| `build`    | Build process, tooling, dependency updates      |
-| `ci`       | CI/CD configuration changes                     |
-| `revert`   | Reverts a previous commit                       |
+| Type       | When to use                                        |
+| ---------- | -------------------------------------------------- |
+| `feat`     | A new feature                                      |
+| `fix`      | A bug fix                                          |
+| `docs`     | Documentation changes only                         |
+| `style`    | Formatting, whitespace, SCSS/CSS — no logic change |
+| `refactor` | Code change that is neither a fix nor a feature    |
+| `perf`     | Performance improvement                            |
+| `test`     | Adding or updating unit, render, or E2E tests      |
+| `build`    | Build process, tooling, dependency updates         |
+| `ci`       | CI/CD configuration changes                        |
+| `revert`   | Reverts a previous commit                          |
+| `i18n`     | Internationalization or translation updates        |
+| `a11y`     | Accessibility improvements or fixes                |
 
 ### Scopes
 
 Scopes are optional but recommended. Allowed values are restricted to this monorepo's projects and shared concerns:
 
-| Scope     | What it covers                                  |
-| --------- | ----------------------------------------------- |
-| `app`     | `app/` — features code                          |
-| `mocks`   | `mocks/` — shared MSW handlers and fixture data |
-| `deps`    | Dependency updates                              |
-| `ci`      | CI/CD pipeline                                  |
-| `release` | Version bumps / changelogs                      |
+| Scope     | What it covers                                     |
+| --------- | -------------------------------------------------- |
+| `app`     | `src/app/` — features, components, services        |
+| `social`  | `src/app/social-media/` — social media domain code |
+| `gallery` | `src/app/image-gallery/` — image gallery code      |
+| `weather` | `src/app/weather/` — weather feature code          |
+| `core`    | `src/app/core/` — interceptors, shared infra       |
+| `mocks`   | `mocks/` — MSW handlers and fixture data           |
+| `e2e`     | `e2e/` — Playwright E2E tests                      |
+| `i18n`    | `src/assets/i18n/` — translation files             |
+| `theme`   | `src/theme/` — SCSS variables and theming          |
+| `deps`    | Dependency updates                                 |
+| `ci`      | CI/CD pipeline                                     |
+| `release` | Version bumps / changelogs                         |
 
 ### Rules
 
