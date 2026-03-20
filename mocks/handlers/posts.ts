@@ -1,5 +1,6 @@
 import { delay, http, HttpResponse } from 'msw';
 import { socialPostsDb, type MockSocialPost } from '@mocks/db';
+import { generateMockSocialPosts } from '@mocks/generate-mock-social-posts';
 
 const BASE = 'https://api-gateway.example.com/v1';
 
@@ -34,7 +35,10 @@ export const socialMediaHandlers = [
   http.get(`${BASE}/social/posts`, async () => {
     await delay(DELAY.long);
 
-    const posts = [...socialPostsDb]
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    const morePosts = generateMockSocialPosts(75, 26);
+
+    const posts = [...socialPostsDb, ...morePosts]
       .sort(
         (leftPost, rightPost) =>
           new Date(rightPost.timestamp).getTime() - new Date(leftPost.timestamp).getTime(),
