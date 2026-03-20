@@ -1,3 +1,6 @@
+/**
+ * Describes the properties of an author.
+ */
 export interface MockPostAuthor {
   id: string;
   handle: string;
@@ -5,6 +8,9 @@ export interface MockPostAuthor {
   avatarUrl: string;
 }
 
+/**
+ * This is a mock database of social media posts for testing and development purposes.
+ */
 export interface MockSocialPost {
   id: string;
   avatarUrl: string;

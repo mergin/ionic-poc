@@ -1,5 +1,11 @@
 import { delay, http, HttpResponse, passthrough } from 'msw';
 
+/**
+ * Mock handlers for the Picsum API (https://picsum.photos/).
+ *
+ * The handlers are designed to provide realistic responses for the most common API endpoints, including paginated image lists and dynamic image generation.
+ * Each handler simulates network latency and validates query parameters to ensure a consistent testing experience.
+ */
 interface MockPicsumImage {
   id: string;
   author: string;
